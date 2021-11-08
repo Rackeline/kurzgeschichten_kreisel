@@ -44,13 +44,21 @@ const app = Vue.createApp({
                 console.log('Input-Error')
             }  
             else {
-                this.shortstory.shift
-                console.log(this.shortstory)
-                axios.post("http://localhost:8080/shortstories/",
-                    this.shortstory)
+                let post = {
+                    title: this.shortstory.title,
+                    author: this.shortstory.author,
+                    genre: this.shortstory.genre, 
+                    creationDate: new Date(Date.now()),
+                    text: this.shortstory.text
+                    }
+                console.log(post)
+                axios.post("http://localhost:8080/shortstories",
+                    post)
                     .then(result => {
                         console.log(result)
                         this.statuscode = result.status
+                        this.backHome()
+                        location.reload()
                     })
                     .catch(error =>
                         console.log(error))
@@ -69,8 +77,7 @@ const app = Vue.createApp({
                     title: this.shortstory.title,
                     author: this.shortstory.author,
                     genre: this.shortstory.genre, 
-                    creationDate: this.creationDate,
-                    text: this.shortstory.text
+                    creationDate: new Date(Date.now())
                     };
                     axios.put("http://localhost:8080/shortstories/"+ this.shortstory.id , put).then((result) => {
                     console.log(result);
@@ -82,7 +89,10 @@ const app = Vue.createApp({
             console.log(id)
             axios.delete("http://localhost:8080/shortstories/"+ id).then((result) => {
                 console.log(result);
+                this.backHome();
+                location.reload()
             });
+            
         },
         change() {
             this.read = false
@@ -98,7 +108,7 @@ const app = Vue.createApp({
             this.shortstory.id = ''
             this.shortstory.title = ''
             this.shortstory.author = ''
-            this.shortstory.creationDate = new Date(Date.now()).toLocaleDateString()
+            this.shortstory.creationDate = new Date(Date.now())
             this.shortstory.genre = ''
             this.shortstory.text = ''
             this.change()
