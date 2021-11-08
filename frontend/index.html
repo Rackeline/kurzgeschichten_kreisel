@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Kurzgeschichtenkreisel</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js"
+    integrity="sha512-lTLt+W7MrmDfKam+r3D2LURu0F47a3QaW5nF0c6Hl0JDZ57ruei+ovbg7BrZ+0bjVJ5YgzsAWE+RreERbpPE1g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="app">
+    <h1>Kurzgeschichtenkreisel</h1>
+    <h2>Finde hier deine liebsten Geschichten</h2>
+
+    <div v-if="home == true">
+      <ul>
+        <li v-for="(shortstory, index ) in shortstories"
+          @click="showdetail(shortstory.id, shortstory.title, shortstory.author, shortstory.creationDate, shortstory.genre, shortstory.text)" :key="shortstory.id">
+          <p>Autor: {{ shortstory.author }}</p>
+          <p>Titel: {{ shortstory.title }}</p>
+          <p>Genre: {{ shortstory.genre }}</p>
+        </li>
+      </ul>
+
+      <button @click="newStory()">Neu</button>
+    </div>
+
+    <div v-if="read == true">
+      <h3>{{ shortstory.title }}</h3>
+      <h4>{{ shortstory.author}}</h4>
+      <h5>{{ shortstory.genre }}</h5>
+      <h5>{{ shortstory.creationDate}}</h5>
+      <p> {{ shortstory.text }} </p>
+
+      <button @click="backHome()">Zurück</button>
+      <button @click="change()">Ändern</button>
+      <button @click="onDelete(shortstory.id)">Löschen</button>
+    </div>
+
+    <div v-if="changeInput == true">
+      <div>
+        <form @submit.prevent="onChange()">
+          <div>
+            <label for="title">Title:</label>
+            <textarea style="width:500px; height: 50px;" v-model="shortstory.title"></textarea>
+          </div>
+          <div>
+            <label for="author">Author:</label>
+            <textarea style="width:500px; height: 50px;" v-model="shortstory.author"></textarea>
+          </div>
+          <div>
+            <label for="author">Genre:</label>
+            <textarea style="width:500px; height: 50px;" v-model="shortstory.genre"></textarea>
+          </div>
+          <div>
+            <label for="text">Text:</label>
+            <textarea style="width:500px; height: 100px;" v-model="shortstory.text"></textarea>
+          </div>
+
+          <button>Speichern</button>
+          <button @click="backHome()">Zurück</button>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Import App -->
+  <script src="main.js"></script>
+
+  <!-- Mount App -->
+  <script>
+    const mountedApp = app.mount('#app')
+  </script>
+</body>
+
+</html>
