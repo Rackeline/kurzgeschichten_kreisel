@@ -5,6 +5,7 @@ import de.caro_annemie.kurzgeschichten_kreisel.KurzgeschichtenRepository;
 import de.caro_annemie.kurzgeschichten_kreisel.model.Kurzgeschichte;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ public class KurzgeschichtenController {
   // --------------URL mappings------------------
   //get list of entries
   @GetMapping("/shortstories")
+  @CrossOrigin
   public List<Kurzgeschichte> getList(@RequestParam(required = false) String title) {
       if (title != null) {
         return repository.findByTitle(title);
@@ -34,6 +36,7 @@ public class KurzgeschichtenController {
 
   //get single item by id
   @GetMapping("/shortstories/{id}")
+  @CrossOrigin
   public Kurzgeschichte getByID(@PathVariable Long id) {
     return repository
       .findById(id)
@@ -42,12 +45,14 @@ public class KurzgeschichtenController {
 
   //create shortstory in database
   @PostMapping("/shortstories")
+  @CrossOrigin
   public Kurzgeschichte create(@RequestBody Kurzgeschichte kurzgeschichte) {
       return repository.save(kurzgeschichte);
   }
 
   //delete shortstory from database
   @DeleteMapping("/shortstories/{id}")
+  @CrossOrigin
   void delete(@PathVariable Long id) {
     repository.deleteById(id);
   }
