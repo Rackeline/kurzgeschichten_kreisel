@@ -15,4 +15,10 @@ public interface KurzgeschichtenRepository extends JpaRepository<Kurzgeschichte,
     @Query("SELECT k FROM Kurzgeschichte k WHERE k.title = ?1")
     List<Kurzgeschichte> findByTitle(String title);
 
+    @Query("SELECT k FROM Kurzgeschichte k WHERE k.genre = ?1")
+    List<Kurzgeschichte> findByGenre(String genre);
+
+    @Query("SELECT k FROM Kurzgeschichte k WHERE k.author = ?1")
+    List<Kurzgeschichte> findByAuthor(String author);
+
 }
