@@ -27,10 +27,16 @@
 *               returned Eintrag mit der übergebenen id als JSON
 
 * Lesen	        GET	        /shortstories/?title=$title
-*                           returned Einträge die in der Datenbank den angegebenen Titel hinterlegt haben (Titel nicht einzigartig)
+*               returned Einträge die in der Datenbank den angegebenen Titel hinterlegt haben (Titel nicht einzigartig)
 
 * Lesen	        GET	        /shortstories/?genre=$genre
-*                           returned Einträge die in der Datenbank das angegebene Genre hinterlegt haben
+*               returned Einträge die in der Datenbank das angegebene Genre hinterlegt haben
 
 * Lesen	        GET	        /shortstories/?author=name
-*                           returned Einträge die in der Datenbank den angegebenen Autor hinterlegt haben
+*               returned Einträge die in der Datenbank den angegebenen Autor hinterlegt haben
+
+* Limit         Optional an allen Endpunkten möglich. Erwartet Ganzzahl (int). Beispiel /shortstories/?genre=$genre&limit=3
+
+## 10.11.2021: nach Refactoring: DB Table Namen angepasst --> unbedingt umbenennen:
+ALTER TABLE kurzgeschichte RENAME TO shortstory;
+ALTER TABLE benutzer RENAME TO "user";

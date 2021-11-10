@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Kurzgeschichte {
+public class Shortstory {
     @Id @GeneratedValue 
     private long id;
     @NotNull
@@ -23,7 +23,7 @@ public class Kurzgeschichte {
     private String text;
 
     //constructor
-    public Kurzgeschichte(String title, String author, Date creationDate, String text, String genre) {
+    public Shortstory(String title, String author, Date creationDate, String text, String genre) {
         this.title = title;
         this.author = author;
         this.creationDate = creationDate;
@@ -31,7 +31,7 @@ public class Kurzgeschichte {
         this.genre = genre;
     }
 
-    public Kurzgeschichte() {
+    public Shortstory() {
 
     }
 
