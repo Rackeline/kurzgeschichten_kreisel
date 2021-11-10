@@ -88,11 +88,14 @@ const app = Vue.createApp({
                 
         },
         onDelete(id){
-            console.log(id)
-            axios.delete("http://localhost:8080/shortstories/"+ id).then((result) => {
+            if(confirm('Möchten Sie den Eintrag endgültig löschen?')) {
+               axios.delete("http://localhost:8080/shortstories/"+ id).then((result) => {
                 console.log(result);
                 location.reload()
-            });
+                }); 
+            } else {
+                this.Read()
+            }    
             
         },
 
