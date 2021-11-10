@@ -3,8 +3,11 @@ const app = Vue.createApp({
         return {
             shortstories: [],
             home: true,
+            selector: true,
             read: false,
             changeInput: false,
+            genreSearch: '',
+            titleSearch: '',
             shortstory: {
                 id: '',
                 author: '',
@@ -17,7 +20,7 @@ const app = Vue.createApp({
     },
     created() {
         axios
-            .get('http://localhost:8080/shortstories/')
+            .get('http://localhost:8080/shortstories/' , {params: {limit: 10}})
             .then((response) => {
                 console.log(response.data)
                 this.shortstories = response.data
@@ -35,9 +38,7 @@ const app = Vue.createApp({
             this.shortstory.genre = genre
             this.shortstory.text = text
             console.log("selectet: ",this.shortstory.id)
-            this.home = false
-            this.read = true
-            //console.log(this.shortstory.title)
+            this.Read()
         },
         onPost() {
             if (this.shortstory.genre == '' || this.shortstory.text == '' || this.shortstory.title == '' || this.shortstory.author == '') {
@@ -57,7 +58,6 @@ const app = Vue.createApp({
                     .then(result => {
                         console.log(result)
                         this.statuscode = result.status
-                        this.backHome()
                         location.reload()
                     })
                     .catch(error =>
@@ -77,10 +77,12 @@ const app = Vue.createApp({
                     title: this.shortstory.title,
                     author: this.shortstory.author,
                     genre: this.shortstory.genre, 
-                    creationDate: new Date(Date.now())
+                    creationDate: new Date(Date.now()),
+                    text: this.shortstory.text
                     };
                     axios.put("http://localhost:8080/shortstories/"+ this.shortstory.id , put).then((result) => {
                     console.log(result);
+                    this.Read()
                     })
                 }
                 
@@ -89,20 +91,29 @@ const app = Vue.createApp({
             console.log(id)
             axios.delete("http://localhost:8080/shortstories/"+ id).then((result) => {
                 console.log(result);
-                this.backHome();
                 location.reload()
             });
             
         },
+
         change() {
             this.read = false
             this.home = false
-            this.changeInput = true
+            this.changeInput = true, 
+            this.selector = false
         },
-        backHome(){
+        Home(){
+            location.reload()
             this.read = false
             this.changeInput = false 
-            this.home = true
+            this.home = true, 
+            this.selector = true
+        },
+        Read(){
+            this.home = false
+            this.read = true
+            this.changeInput = false, 
+            this.selector = false 
         },
         newStory(){
             this.shortstory.id = ''
@@ -112,6 +123,43 @@ const app = Vue.createApp({
             this.shortstory.genre = ''
             this.shortstory.text = ''
             this.change()
+        },
+        selectGenre(){
+            console.log(this.genreSearch)
+            if (this.genreSearch == ""){
+                location.reload()
+            }
+            else {
+                axios
+                    .get('http://localhost:8080/shortstories/', {params: {genre: this.genreSearch}})
+                    .then((response) => {
+                        console.log(response.data)
+                        this.shortstories = response.data
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+            }
+            
+        },
+        searchTitle() {
+            this.genreSearch = ""
+            if (this.titleSearch == ""){
+                location.reload()
+            }
+            axios
+                    .get('http://localhost:8080/shortstories/', {params: {title: this.titleSearch}})
+                    .then((response) => {
+                        console.log(response.data)
+                        this.shortstories = response.data
+                        if (response.data.length == 0) {
+                            alert('Titel nicht gefunden.')
+                            location.reload()
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
         }
     }
 })
