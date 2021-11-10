@@ -42,7 +42,7 @@ const app = Vue.createApp({
         },
         onPost() {
             if (this.shortstory.genre == '' || this.shortstory.text == '' || this.shortstory.title == '' || this.shortstory.author == '') {
-                console.log('Input-Error')
+                alert('Fehlende Pflichtfelder')
             }  
             else {
                 let post = {
@@ -80,9 +80,12 @@ const app = Vue.createApp({
                     creationDate: new Date(Date.now()),
                     text: this.shortstory.text
                     };
-                    axios.put("http://localhost:8080/shortstories/"+ this.shortstory.id , put).then((result) => {
-                    console.log(result);
-                    this.Read()
+                    axios
+                    .put("http://localhost:8080/shortstories/"+ this.shortstory.id , put)
+                    .then((result) => {
+                        alert('Änderung gespeichert.')
+                        console.log(result);
+                        this.Read()
                     })
                 }
                 

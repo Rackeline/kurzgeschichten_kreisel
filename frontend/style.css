@@ -8,6 +8,19 @@ p, ul {
     padding: 0;
 }
 
+.headText {
+    margin-top: 40px;
+}
+h3, h4, h5,.date {
+    margin: 5px auto;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+h4, h5 {
+    font-weight: 300;
+}
+
+
 li {
     list-style-type: none;
     background-color: rgb(128, 162, 163);

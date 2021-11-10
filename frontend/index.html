@@ -18,7 +18,7 @@
     <h2>Finde spannende Geschichten und werde selbst Autor!</h2>
 
     <div v-if="selector == true">
-      <label for="genreSelect" >Genre wählen:</label>
+      <label for="genreSelect">Genre wählen:</label>
       <select name="genreSelect" @change="selectGenre()" class="genreSelect" v-model="genreSearch">
         <option value="">Alle</option>
         <option value="Romance">Romance</option>
@@ -29,11 +29,11 @@
         <option value="Kinder">Kinder</option>
       </select>
       <form @submit.prevent="searchTitle()">
-          <label for="titleSearch">Titel suchen:</label>
-          <input type="text" v-model="titleSearch">
+        <label for="titleSearch">Titel suchen:</label>
+        <input type="text" v-model="titleSearch">
         <button>Suchen</button><button @click="Home()">Clear</button>
       </form>
-      
+
 
     </div>
 
@@ -52,12 +52,13 @@
     </div>
 
     <div v-if="read == true">
-      <h3>{{ shortstory.title }}</h3>
-      <h4>{{ shortstory.author}}</h4>
-      <h5>{{ shortstory.genre }}</h5>
-      <h5>{{ shortstory.creationDate }}</h5>
-      <p class="text"> {{ shortstory.text }} </p>
-
+      <div class="headText">
+        <h3>{{ shortstory.title }}</h3>
+        <h4>von: {{ shortstory.author}}</h4>
+        <h5>Genre: {{ shortstory.genre }}</h5>
+        <p class="date">{{ shortstory.creationDate }}</p>
+      </div>  
+        <p class="text"> {{ shortstory.text }} </p>
       <button @click="Home()">Zurück</button>
       <button @click="change()">Ändern</button>
       <button @click="onDelete(shortstory.id)">Löschen</button>
