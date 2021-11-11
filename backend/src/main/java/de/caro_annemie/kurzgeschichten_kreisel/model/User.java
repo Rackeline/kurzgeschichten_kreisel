@@ -4,63 +4,79 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "`user`")
+@Table(
+  name = "`user`",
+  uniqueConstraints = {
+    @UniqueConstraint(columnNames = "username"),
+    @UniqueConstraint(columnNames = "email"),
+  }
+)
+
 public class User {
-    @Id @GeneratedValue 
-    private long id;
-    private String name;
-    private String role;
-    private String password;
-    private String mail;
+  @Id
+  @GeneratedValue
+  private long id;
 
-    //constructor   
-    public User(String name, String role, String password, String mail) {
-        this.name = name;
-        this.role = role;
-        this.password = password;
-        this.mail = mail;
-    }
+  @NotBlank
+  private String username;
 
-    public User(){
+  @NotBlank
+  private String role;
 
-    }
+  @NotBlank
+  private String password;
 
-    //getter and setter
-    public long getId() {
-        return id;
-    }
+  @NotBlank
+  private String email;
 
-    public String getName() {
-        return name;
-    }
+  //constructor
+  public User(String username, String role, String password, String email) {
+    this.username = username;
+    this.role = role;
+    this.password = password;
+    this.email = email;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public User() {}
 
-    public String getRole() {
-        return role;
-    }
+  //getter and setter
+  public long getId() {
+    return id;
+  }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public String getRole() {
+    return role;
+  }
 
-    public String getMail() {
-        return mail;
-    }
+  public void setRole(String role) {
+    this.role = role;
+  }
 
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
 }

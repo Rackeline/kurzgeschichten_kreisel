@@ -5,21 +5,27 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Shortstory {
-    @Id @GeneratedValue 
+    @Id 
+    @GeneratedValue 
     private long id;
-    @NotNull
+
+    @NotBlank
     private String title;
-    @NotNull
+
+    @NotBlank
     private String author;
-    @NotNull
+
+    @NotBlank
     private String genre;
-    @NotNull
+
+    @NotBlank
     private Date creationDate;
-    @NotNull
+
+    @NotBlank
     private String text;
 
     //constructor
