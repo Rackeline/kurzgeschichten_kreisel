@@ -72,6 +72,10 @@
 - "Bearer" muss vom Client dem Token vor Verwendung vorangestellt werden (s. Beispiel oben)
 - Bei Abmeldung (logout) muss das Token beim Client gelöscht werden --> wird nicht mehr mitgeschickt. Keine Serverseitige Abmeldung notwendig.
 
+### Roles
+- Author
+- Reader
+
 ## 10.11.2021: nach Refactoring: DB Table Namen angepasst --> unbedingt umbenennen:
 ALTER TABLE kurzgeschichte RENAME TO shortstory;
 ALTER TABLE benutzer RENAME TO "user";
