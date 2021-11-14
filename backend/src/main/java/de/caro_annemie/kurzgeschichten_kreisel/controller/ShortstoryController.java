@@ -4,6 +4,8 @@ import de.caro_annemie.kurzgeschichten_kreisel.ShortstoryNotFoundException;
 import de.caro_annemie.kurzgeschichten_kreisel.ShortstoryRepository;
 import de.caro_annemie.kurzgeschichten_kreisel.model.Shortstory;
 import java.util.List;
+
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin
 @RestController
 public class ShortstoryController {
   private final ShortstoryRepository repository;
@@ -27,14 +30,14 @@ public class ShortstoryController {
 
   //create shortstory in database
   @PostMapping("/shortstories")
-  @CrossOrigin
+  @PreAuthorize("hasRole('Author')")
   public Shortstory create(@RequestBody Shortstory shortstory) {
     return repository.save(shortstory);
   }
 
   //change shortstory
   @PutMapping("/shortstories/{id}")
-  @CrossOrigin
+  @PreAuthorize("hasRole('Author')")
   Shortstory replace(
     @RequestBody Shortstory newShortstory,
     @PathVariable Long id
@@ -58,14 +61,14 @@ public class ShortstoryController {
 
   //delete shortstory from database
   @DeleteMapping("/shortstories/{id}")
-  @CrossOrigin
+  @PreAuthorize("hasRole('Author')")
   void delete(@PathVariable Long id) {
     repository.deleteById(id);
   }
 
   //get list of entries
   @GetMapping("/shortstories")
-  @CrossOrigin
+  @PreAuthorize("hasRole('Author') or hasRole('Reader')")
   public List<Shortstory> getList(
     @RequestParam(required = false) String title, 
     @RequestParam(required = false) String genre, 
@@ -95,15 +98,12 @@ public class ShortstoryController {
         return repository.findByAuthor(author, limit);
       }
       return repository.findAll(limit);
-    }
-    
-    
+    }   
   }
-
 
   //get single item by id
   @GetMapping("/shortstories/{id}")
-  @CrossOrigin
+  @PreAuthorize("hasRole('Author') or hasRole('Reader')")
   public Shortstory getByID(@PathVariable Long id) {
     return repository
       .findById(id)

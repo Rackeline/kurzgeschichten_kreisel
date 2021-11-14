@@ -1,7 +1,7 @@
 package de.caro_annemie.kurzgeschichten_kreisel.model.payload;
 
 public class SignupRequest {
-    private String username, email, password;
+    private String username, email, password, role;
 
     public String getUsername() {
         return username;
@@ -25,6 +25,14 @@ public class SignupRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
     
 }
