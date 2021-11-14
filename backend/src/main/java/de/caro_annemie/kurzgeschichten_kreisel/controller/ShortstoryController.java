@@ -1,10 +1,11 @@
 package de.caro_annemie.kurzgeschichten_kreisel.controller;
 
-import de.caro_annemie.kurzgeschichten_kreisel.ShortstoryNotFoundException;
-import de.caro_annemie.kurzgeschichten_kreisel.ShortstoryRepository;
 import de.caro_annemie.kurzgeschichten_kreisel.model.Shortstory;
+import de.caro_annemie.kurzgeschichten_kreisel.services.ShortstoryService;
+
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,12 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
 public class ShortstoryController {
-  private final ShortstoryRepository repository;
 
-  //constructor
-  public ShortstoryController(ShortstoryRepository repository) {
-    this.repository = repository;
-  }
+  @Autowired
+  private ShortstoryService shortstoryService;
 
   // --------------URL mappings------------------
 
@@ -32,7 +30,7 @@ public class ShortstoryController {
   @PostMapping("/shortstories")
   @PreAuthorize("hasRole('Author')")
   public Shortstory create(@RequestBody Shortstory shortstory) {
-    return repository.save(shortstory);
+    return shortstoryService.create(shortstory);
   }
 
   //change shortstory
@@ -42,28 +40,14 @@ public class ShortstoryController {
     @RequestBody Shortstory newShortstory,
     @PathVariable Long id
   ) {
-    return repository
-      .findById(id)
-      .map(
-        shortstory -> {
-          shortstory.setTitle(newShortstory.getTitle());
-          shortstory.setText(newShortstory.getText());
-          shortstory.setGenre(newShortstory.getGenre());
-          return repository.save(shortstory);
-        }
-      )
-      .orElseGet(
-        () -> {
-          return repository.save(newShortstory);
-        }
-      );
+    return shortstoryService.replace(newShortstory, id);
   }
 
   //delete shortstory from database
   @DeleteMapping("/shortstories/{id}")
   @PreAuthorize("hasRole('Author')")
   void delete(@PathVariable Long id) {
-    repository.deleteById(id);
+    shortstoryService.delete(id);
   }
 
   //get list of entries
@@ -75,38 +59,13 @@ public class ShortstoryController {
     @RequestParam(required = false) String author,
     @RequestParam(required = false) Integer limit
   ) {
-    if (limit == null) {
-      if (title != null) {
-        return repository.findByTitle(title);
-      }
-      if (genre != null) {
-        return repository.findByGenre(genre);
-      }
-      if (author != null) {
-        return repository.findByAuthor(author);
-      }
-      return repository.findAll();
-    }
-    else {
-      if (title != null) {
-        return repository.findByTitle(title, limit);
-      }
-      if (genre != null) {
-        return repository.findByGenre(genre, limit);
-      }
-      if (author != null) {
-        return repository.findByAuthor(author, limit);
-      }
-      return repository.findAll(limit);
-    }   
+     return shortstoryService.getList(title, genre, author, limit);
   }
 
   //get single item by id
   @GetMapping("/shortstories/{id}")
   @PreAuthorize("hasRole('Author') or hasRole('Reader')")
   public Shortstory getByID(@PathVariable Long id) {
-    return repository
-      .findById(id)
-      .orElseThrow(() -> new ShortstoryNotFoundException(id));
+    return shortstoryService.getByID(id);
   }
 }
