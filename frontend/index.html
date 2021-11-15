@@ -43,9 +43,9 @@
         <li v-for="(shortstory, index ) in shortstories"
           @click="showdetail(shortstory.id, shortstory.title, shortstory.author, shortstory.creationDate, shortstory.genre, shortstory.text)"
           :key="shortstory.id">
-          <p>Autor: {{ shortstory.author }}</p>
-          <p>Titel: {{ shortstory.title }}</p>
-          <p>Genre: {{ shortstory.genre }}</p>
+          <p><i>{{ shortstory.author }}</i></p>
+          <p><strong>{{ shortstory.title }}</strong></p>
+          <p>{{ shortstory.genre }}</p>
         </li>
       </ul>
       <button @click="newStory()">Neu</button>
@@ -56,7 +56,6 @@
         <h3>{{ shortstory.title }}</h3>
         <h4>von: {{ shortstory.author}}</h4>
         <h5>Genre: {{ shortstory.genre }}</h5>
-        <p class="date">{{ shortstory.creationDate }}</p>
       </div>  
         <p class="text"> {{ shortstory.text }} </p>
       <button @click="Home()">Zurück</button>

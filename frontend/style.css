@@ -29,12 +29,12 @@ li {
     border-radius: 10px;
     display: flex;
     align-items: center;
-    justify-content:left; 
+    justify-content: center; 
 }
 
 
 li p {
-    margin-right: 3rem;
+    margin-right: 8rem;
 }
 .text {
     margin: 20px auto;
