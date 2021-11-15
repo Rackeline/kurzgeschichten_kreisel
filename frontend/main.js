@@ -8,8 +8,10 @@ const app = Vue.createApp({
             selector: false,
             read: false,
             changeInput: false,
+            ownTitles: '',
             genreSearch: '',
             titleSearch: '',
+            status: '',
             shortstory: {
                 id: '',
                 author: '',
@@ -28,23 +30,6 @@ const app = Vue.createApp({
             role: ''
         }
     },
-    // created() {
-    //     if(this.token == true){
-    //         let config = {
-    //             params: {limit: 10},
-    //             headers: { Authorization: 'Bearer ' + localStorage.token}
-    //       }
-    //     axios
-    //         .get('http://localhost:8080/shortstories/', config)
-    //         .then((response) => {
-    //             console.log(response.data)
-    //             this.shortstories = response.data
-    //         })
-    //         .catch((error) => {
-    //             console.log(error)
-    //         })
-    //     }    
-    // },
     methods: {
         created() {
             let config = {
@@ -74,10 +59,15 @@ const app = Vue.createApp({
             this.Read()
         },
         onPost() {
-            if (this.shortstory.genre == '' || this.shortstory.text == '' || this.shortstory.title == '' || this.shortstory.author == '') {
+            if (this.shortstory.genre == '' || this.shortstory.text == '' || this.shortstory.title == '') {
                 alert('Fehlende Pflichtfelder')
             }
             else {
+                let config = {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.token
+                    }
+                }
                 let post = {
                     title: this.shortstory.title,
                     author: this.shortstory.author,
@@ -87,11 +77,11 @@ const app = Vue.createApp({
                 }
                 console.log(post)
                 axios.post("http://localhost:8080/shortstories",
-                    post)
+                    post, config)
                     .then(result => {
                         console.log(result)
                         this.statuscode = result.status
-                        location.reload()
+                        this.Home()
                     })
                     .catch(error =>
                         console.log(error))
@@ -104,7 +94,11 @@ const app = Vue.createApp({
                 this.onPost()
             }
             if (this.shortstory.id != '') {
-                console.log('put id:', this.shortstory.id)
+                let config = {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.token
+                    }
+                }
                 let put = {
                     title: this.shortstory.title,
                     author: this.shortstory.author,
@@ -113,7 +107,7 @@ const app = Vue.createApp({
                     text: this.shortstory.text
                 };
                 axios
-                    .put("http://localhost:8080/shortstories/" + this.shortstory.id, put)
+                    .put("http://localhost:8080/shortstories/" + this.shortstory.id, put, config)
                     .then((result) => {
                         alert('Änderung gespeichert.')
                         console.log(result);
@@ -124,9 +118,14 @@ const app = Vue.createApp({
         },
         onDelete(id) {
             if (confirm('Möchten Sie den Eintrag endgültig löschen?')) {
-                axios.delete("http://localhost:8080/shortstories/" + id).then((result) => {
+                let config = {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.token
+                    }
+                }
+                axios.delete("http://localhost:8080/shortstories/" + id, config).then((result) => {
                     console.log(result);
-                    location.reload()
+                    this.Home()
                 });
             } else {
                 this.Read()
@@ -142,6 +141,7 @@ const app = Vue.createApp({
         },
         Home() {
             this.titleSearch = ''
+            this.ownTitles = false
             this.created()
             this.read = false
             this.changeInput = false
@@ -188,7 +188,6 @@ const app = Vue.createApp({
 
         },
         searchTitle() {
-
             if (this.titleSearch == "") {
                 this.created()
             }
@@ -211,6 +210,26 @@ const app = Vue.createApp({
                     .catch((error) => {
                         console.log(error)
                     })
+            }
+        },
+        showOwnTitles(){
+            if(this.ownTitles == true){
+                let config = {
+                    params: { author: this.logindata.username },
+                    headers: { Authorization: 'Bearer ' + localStorage.token }
+                }
+                axios
+                    .get('http://localhost:8080/shortstories/', config)
+                    .then((response) => {
+                        console.log(response.data)
+                        console.log(localStorage.token)
+                        this.shortstories = response.data
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+            } else {
+                this.Home()
             }
         },
         login() {
@@ -246,18 +265,34 @@ const app = Vue.createApp({
                         localStorage.setItem('role', response.data.roles[0])
                         this.token = localStorage.hasOwnProperty('token')
                         this.role = localStorage.role
+                        this.status = response.status
                         this.logindata = response.data
                         this.selector = true
                         this.home = true
                         this.created()
                         console.log(this.role)
                         console.log(localStorage.token)
+                        
                     })
-                    .catch(error =>
-                        console.log(error))
-
-
+                    .catch(error => {
+                        console.log(error.response)
+                        if(error.response.status == 401){
+                            alert('Benutzer oder Passwort unbekannt')
+                        }
+                        this.user.username = ''
+                        this.user.password = ''
+                    })
+                    
             }
+        },
+        logout(){
+            this.token = false
+            this.role = ''
+            this.user.username = ''
+            this.user.password = ''
+            this.user.role = ''
+            this.user.email = ''
+            window.localStorage.clear();
         }
 
     }

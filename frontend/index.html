@@ -26,7 +26,7 @@
         </div>
         <div>
           <label for="password">Passwort:</label>
-          <input v-model="user.password"></input>
+          <input type="password" minlength="5" required v-model="user.password"></input>
         </div>
 
         <div v-if="regist == true">
@@ -52,6 +52,12 @@
     </div>
 
     <div v-if="token == true">
+      <div>
+        <button @click="logout()" style="float: right;">Logout</button>
+        <p style="float: right;">{{ user.username }}</p>
+      </div>
+      
+      
       <div v-if="selector == true">
         <label for="genreSelect">Genre wählen:</label>
         <select name="genreSelect" @change="selectGenre()" class="genreSelect" v-model="genreSearch">
@@ -67,7 +73,14 @@
           <label for="titleSearch">Titel suchen:</label>
           <input type="text" v-model="titleSearch">
           <button>Suchen</button>
-        </form><button @click="Home()">Clear</button>
+        </form>
+        <div v-if="role === 'ROLE_Author'">
+          <label for="ownTitles">eigene Titel anzeigen: </label>
+          <input type="checkbox" value="ownTitles" v-model="ownTitles" @change="showOwnTitles()">
+          
+        </div>
+        
+        <button @click="Home()">Clear</button>
       </div>
 
 
@@ -92,11 +105,10 @@
           <h3>{{ shortstory.title }}</h3>
           <h4>von: {{ shortstory.author}}</h4>
           <h5>Genre: {{ shortstory.genre }}</h5>
-          <p class="date">{{ shortstory.creationDate }}</p>
         </div>
         <p class="text"> {{ shortstory.text }} </p>
         <button @click="Home()">Zurück</button>
-        <div v-if="role === 'ROLE_Author'">
+        <div v-if="role === 'ROLE_Author' && logindata.username == shortstory.author">
           <button @click="change()">Ändern</button>
           <button @click="onDelete(shortstory.id)">Löschen</button>
         </div>
@@ -105,10 +117,6 @@
       <div v-if="changeInput == true">
         <div>
           <form @submit.prevent="onChange()">
-            <div>
-              <label for="author">Autor:</label>
-              <textarea style="width:500px; height: 50px;" v-model="shortstory.author"></textarea>
-            </div>
             <div>
               <label for="title">Titel:</label>
               <textarea style="width:500px; height: 50px;" v-model="shortstory.title"></textarea>
