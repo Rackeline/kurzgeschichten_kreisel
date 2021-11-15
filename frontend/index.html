@@ -17,88 +17,126 @@
     <h1>Kurzgeschichtenkreisel</h1>
     <h2>Finde spannende Geschichten und werde selbst Autor!</h2>
 
-    <div v-if="selector == true">
-      <label for="genreSelect">Genre wählen:</label>
-      <select name="genreSelect" @change="selectGenre()" class="genreSelect" v-model="genreSearch">
-        <option value="">Alle</option>
-        <option value="Romance">Romance</option>
-        <option value="History">History</option>
-        <option value="Fantasy">Fantasy</option>
-        <option value="Crime">Crime</option>
-        <option value="Ratgeber">Ratgeber</option>
-        <option value="Kinder">Kinder</option>
-      </select>
-      <form @submit.prevent="searchTitle()">
-        <label for="titleSearch">Titel suchen:</label>
-        <input type="text" v-model="titleSearch">
-        <button>Suchen</button><button @click="Home()">Clear</button>
-      </form>
+    <div v-if="token == false">
+      <p>Melde dich auf der Platform an:</p>
+      <form @submit.prevent="login()">
+        <div>
+          <label for="author">Name:</label>
+          <input v-model="user.username"></input>
+        </div>
+        <div>
+          <label for="password">Passwort:</label>
+          <input v-model="user.password"></input>
+        </div>
 
-
-    </div>
-
-
-    <div v-if="home == true">
-      <ul>
-        <li v-for="(shortstory, index ) in shortstories"
-          @click="showdetail(shortstory.id, shortstory.title, shortstory.author, shortstory.creationDate, shortstory.genre, shortstory.text)"
-          :key="shortstory.id">
-          <p>Autor: {{ shortstory.author }}</p>
-          <p>Titel: {{ shortstory.title }}</p>
-          <p>Genre: {{ shortstory.genre }}</p>
-        </li>
-      </ul>
-      <button @click="newStory()">Neu</button>
-    </div>
-
-    <div v-if="read == true">
-      <div class="headText">
-        <h3>{{ shortstory.title }}</h3>
-        <h4>von: {{ shortstory.author}}</h4>
-        <h5>Genre: {{ shortstory.genre }}</h5>
-        <p class="date">{{ shortstory.creationDate }}</p>
-      </div>  
-        <p class="text"> {{ shortstory.text }} </p>
-      <button @click="Home()">Zurück</button>
-      <button @click="change()">Ändern</button>
-      <button @click="onDelete(shortstory.id)">Löschen</button>
-    </div>
-
-    <div v-if="changeInput == true">
-      <div>
-        <form @submit.prevent="onChange()">
+        <div v-if="regist == true">
           <div>
-            <label for="author">Autor:</label>
-            <textarea style="width:500px; height: 50px;" v-model="shortstory.author"></textarea>
-          </div>
-          <div>
-            <label for="title">Titel:</label>
-            <textarea style="width:500px; height: 50px;" v-model="shortstory.title"></textarea>
-          </div>
-          <div>
-            <label for="genre">Genre:</label>
-            <select name="genre" class="genreSelect" v-model="shortstory.genre">
-              <option value="Romance">Romance</option>
-              <option value="History">History</option>
-              <option value="Fantasy">Fantasy</option>
-              <option value="Crime">Crime</option>
-              <option value="Ratgeber">Ratgeber</option>
-              <option value="Kinder">Kinder</option>
+            <label for="role">Rolle:</label>
+            <select name="role" v-model="user.role">
+              <option value="Author">Autor</option>
+              <option value="Reader">Leser</option>
             </select>
           </div>
           <div>
-            <label for="text">Text:</label>
-            <textarea style="width:500px; height: 100px;" v-model="shortstory.text"></textarea>
+            <label for="password">Email:</label>
+            <input v-model="user.email"></textarea>
           </div>
+          <button>Absenden</button> <button @click="regist = !regist">Zurück</button>
+        </div>
 
-          <button>Speichern</button>
-          <button @click="Home()">Zurück</button>
+        <div v-if="regist == false">
+          <button>Login</button> <button @click="regist = !regist">Registrieren</button>
+        </div>
 
-      </div>
+      </form>
     </div>
 
-  </div>
+    <div v-if="token == true">
+      <div v-if="selector == true">
+        <label for="genreSelect">Genre wählen:</label>
+        <select name="genreSelect" @change="selectGenre()" class="genreSelect" v-model="genreSearch">
+          <option value="">Alle</option>
+          <option value="Romance">Romance</option>
+          <option value="History">History</option>
+          <option value="Fantasy">Fantasy</option>
+          <option value="Crime">Crime</option>
+          <option value="Ratgeber">Ratgeber</option>
+          <option value="Kinder">Kinder</option>
+        </select>
+        <form @submit.prevent="searchTitle()">
+          <label for="titleSearch">Titel suchen:</label>
+          <input type="text" v-model="titleSearch">
+          <button>Suchen</button>
+        </form><button @click="Home()">Clear</button>
+      </div>
 
+
+      <div v-if="home == true">
+        <ul>
+          <li v-for="(shortstory, index ) in shortstories"
+            @click="showdetail(shortstory.id, shortstory.title, shortstory.author, shortstory.creationDate, shortstory.genre, shortstory.text)"
+            :key="shortstory.id">
+            <p>Autor: {{ shortstory.author }}</p>
+            <p>Titel: {{ shortstory.title }}</p>
+            <p>Genre: {{ shortstory.genre }}</p>
+          </li>
+        </ul>
+        <div v-if="role === 'ROLE_Author'">
+          <button @click="newStory()">Neu</button>
+        </div>
+        
+      </div>
+
+      <div v-if="read == true">
+        <div class="headText">
+          <h3>{{ shortstory.title }}</h3>
+          <h4>von: {{ shortstory.author}}</h4>
+          <h5>Genre: {{ shortstory.genre }}</h5>
+          <p class="date">{{ shortstory.creationDate }}</p>
+        </div>
+        <p class="text"> {{ shortstory.text }} </p>
+        <button @click="Home()">Zurück</button>
+        <div v-if="role === 'ROLE_Author'">
+          <button @click="change()">Ändern</button>
+          <button @click="onDelete(shortstory.id)">Löschen</button>
+        </div>
+      </div>
+
+      <div v-if="changeInput == true">
+        <div>
+          <form @submit.prevent="onChange()">
+            <div>
+              <label for="author">Autor:</label>
+              <textarea style="width:500px; height: 50px;" v-model="shortstory.author"></textarea>
+            </div>
+            <div>
+              <label for="title">Titel:</label>
+              <textarea style="width:500px; height: 50px;" v-model="shortstory.title"></textarea>
+            </div>
+            <div>
+              <label for="genre">Genre:</label>
+              <select name="genre" class="genreSelect" v-model="shortstory.genre">
+                <option value="Romance">Romance</option>
+                <option value="History">History</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Crime">Crime</option>
+                <option value="Ratgeber">Ratgeber</option>
+                <option value="Kinder">Kinder</option>
+              </select>
+            </div>
+            <div>
+              <label for="text">Text:</label>
+              <textarea style="width:500px; height: 100px;" v-model="shortstory.text"></textarea>
+            </div>
+
+            <button>Speichern</button>
+            <button @click="Home()">Zurück</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
   <!-- Import App -->
   <script src="main.js"></script>
 

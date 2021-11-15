@@ -2,8 +2,10 @@ const app = Vue.createApp({
     data() {
         return {
             shortstories: [],
-            home: true,
-            selector: true,
+            token: false,
+            regist: false,
+            home: false,
+            selector: false,
             read: false,
             changeInput: false,
             genreSearch: '',
@@ -15,43 +17,74 @@ const app = Vue.createApp({
                 title: '',
                 genre: '',
                 text: ''
-            }
+            },
+            user: {
+                username: '',
+                password: '',
+                role: '',
+                email: ''
+            },
+            logindata: [],
+            role: ''
         }
     },
-    created() {
-        axios
-            .get('http://localhost:8080/shortstories/' , {params: {limit: 10}})
-            .then((response) => {
-                console.log(response.data)
-                this.shortstories = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    },
+    // created() {
+    //     if(this.token == true){
+    //         let config = {
+    //             params: {limit: 10},
+    //             headers: { Authorization: 'Bearer ' + localStorage.token}
+    //       }
+    //     axios
+    //         .get('http://localhost:8080/shortstories/', config)
+    //         .then((response) => {
+    //             console.log(response.data)
+    //             this.shortstories = response.data
+    //         })
+    //         .catch((error) => {
+    //             console.log(error)
+    //         })
+    //     }    
+    // },
     methods: {
-        showdetail(id, title, author, creationDate, genre, text){
+        created() {
+            let config = {
+                params: { limit: 10 },
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.token
+                }
+            }
+            axios
+                .get('http://localhost:8080/shortstories/', config)
+                .then((response) => {
+                    console.log(response.data)
+                    this.shortstories = response.data
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        },
+        showdetail(id, title, author, creationDate, genre, text) {
             this.shortstory.id = id
             this.shortstory.title = title
             this.shortstory.author = author
             this.shortstory.creationDate = creationDate
             this.shortstory.genre = genre
             this.shortstory.text = text
-            console.log("selectet: ",this.shortstory.id)
+            console.log("selectet: ", this.shortstory.id)
             this.Read()
         },
         onPost() {
             if (this.shortstory.genre == '' || this.shortstory.text == '' || this.shortstory.title == '' || this.shortstory.author == '') {
                 alert('Fehlende Pflichtfelder')
-            }  
+            }
             else {
                 let post = {
                     title: this.shortstory.title,
                     author: this.shortstory.author,
-                    genre: this.shortstory.genre, 
+                    genre: this.shortstory.genre,
                     creationDate: new Date(Date.now()),
                     text: this.shortstory.text
-                    }
+                }
                 console.log(post)
                 axios.post("http://localhost:8080/shortstories",
                     post)
@@ -65,63 +98,64 @@ const app = Vue.createApp({
             }
 
         },
-        onChange(){
-                if (this.shortstory.id == '')
-                {
-                    console.log(this.shortstory.title, this.shortstory.text)
-                    this.onPost()
-                } 
-                if (this.shortstory.id != '') {
-                    console.log('put id:', this.shortstory.id)
-                    let put = {
+        onChange() {
+            if (this.shortstory.id == '') {
+                console.log(this.shortstory.title, this.shortstory.text)
+                this.onPost()
+            }
+            if (this.shortstory.id != '') {
+                console.log('put id:', this.shortstory.id)
+                let put = {
                     title: this.shortstory.title,
                     author: this.shortstory.author,
-                    genre: this.shortstory.genre, 
+                    genre: this.shortstory.genre,
                     creationDate: new Date(Date.now()),
                     text: this.shortstory.text
-                    };
-                    axios
-                    .put("http://localhost:8080/shortstories/"+ this.shortstory.id , put)
+                };
+                axios
+                    .put("http://localhost:8080/shortstories/" + this.shortstory.id, put)
                     .then((result) => {
                         alert('Änderung gespeichert.')
                         console.log(result);
                         this.Read()
                     })
-                }
-                
+            }
+
         },
-        onDelete(id){
-            if(confirm('Möchten Sie den Eintrag endgültig löschen?')) {
-               axios.delete("http://localhost:8080/shortstories/"+ id).then((result) => {
-                console.log(result);
-                location.reload()
-                }); 
+        onDelete(id) {
+            if (confirm('Möchten Sie den Eintrag endgültig löschen?')) {
+                axios.delete("http://localhost:8080/shortstories/" + id).then((result) => {
+                    console.log(result);
+                    location.reload()
+                });
             } else {
                 this.Read()
-            }    
-            
+            }
+
         },
 
         change() {
             this.read = false
             this.home = false
-            this.changeInput = true, 
-            this.selector = false
+            this.changeInput = true,
+                this.selector = false
         },
-        Home(){
-            location.reload()
+        Home() {
+            this.titleSearch = ''
+            this.created()
             this.read = false
-            this.changeInput = false 
-            this.home = true, 
+            this.changeInput = false
+            this.home = true,
             this.selector = true
+            
         },
-        Read(){
+        Read() {
             this.home = false
             this.read = true
-            this.changeInput = false, 
-            this.selector = false 
+            this.changeInput = false,
+                this.selector = false
         },
-        newStory(){
+        newStory() {
             this.shortstory.id = ''
             this.shortstory.title = ''
             this.shortstory.author = ''
@@ -130,42 +164,101 @@ const app = Vue.createApp({
             this.shortstory.text = ''
             this.change()
         },
-        selectGenre(){
+        selectGenre() {
             console.log(this.genreSearch)
-            if (this.genreSearch == ""){
-                location.reload()
+            if (this.genreSearch == "") {
+                this.created()
             }
             else {
+                let config = {
+                    params: { genre: this.genreSearch },
+                    headers: { Authorization: 'Bearer ' + localStorage.token }
+                }
                 axios
-                    .get('http://localhost:8080/shortstories/', {params: {genre: this.genreSearch}})
+                    .get('http://localhost:8080/shortstories/', config)
                     .then((response) => {
                         console.log(response.data)
+                        console.log(localStorage.token)
                         this.shortstories = response.data
                     })
                     .catch((error) => {
                         console.log(error)
                     })
             }
-            
+
         },
         searchTitle() {
-            this.genreSearch = ""
-            if (this.titleSearch == ""){
-                location.reload()
+
+            if (this.titleSearch == "") {
+                this.created()
             }
-            axios
-                    .get('http://localhost:8080/shortstories/', {params: {title: this.titleSearch}})
+            else {
+                let config = {
+                    params: { title: this.titleSearch },
+                    headers: { Authorization: 'Bearer ' + localStorage.token }
+                }
+                axios
+                    .get('http://localhost:8080/shortstories/', config)
                     .then((response) => {
                         console.log(response.data)
+                        this.titleSearch = ''
                         this.shortstories = response.data
                         if (response.data.length == 0) {
                             alert('Titel nicht gefunden.')
-                            location.reload()
+                            this.Home()
                         }
                     })
                     .catch((error) => {
                         console.log(error)
                     })
+            }
+        },
+        login() {
+            if (this.regist == true) {
+                let postregister = {
+                    username: this.user.username,
+                    role: this.user.role,
+                    password: this.user.password,
+                    email: this.user.email
+                }
+                console.log(postregister)
+                axios.post("http://localhost:8080/user/register",
+                    postregister)
+                    .then(result => {
+                        console.log(result)
+                        this.regist = false
+                        this.statuscode = result.status
+                    })
+                    .catch(error =>
+                        console.log(error))
+            }
+            if (this.regist == false) {
+                let postlogin = {
+                    username: this.user.username,
+                    password: this.user.password
+                }
+                console.log(postlogin)
+                axios.post("http://localhost:8080/user/login",
+                    postlogin)
+                    .then((response) => {
+                        console.log(response.status)
+                        localStorage.setItem('token', response.data.token);
+                        localStorage.setItem('role', response.data.roles[0])
+                        this.token = localStorage.hasOwnProperty('token')
+                        this.role = localStorage.role
+                        this.logindata = response.data
+                        this.selector = true
+                        this.home = true
+                        this.created()
+                        console.log(this.role)
+                        console.log(localStorage.token)
+                    })
+                    .catch(error =>
+                        console.log(error))
+
+
+            }
         }
+
     }
 })
