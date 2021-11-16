@@ -80,6 +80,12 @@
 ALTER TABLE kurzgeschichte RENAME TO shortstory;
 ALTER TABLE benutzer RENAME TO "user";
 
-## 14.11.2121: 
+## 14.11.2021: 
 - Erstellen POST: Endpunkt benötigt keinen Autor mehr --> übernimmt den eingeloggten Usernamen als Autor
 - Bearbeiten PUT: Endpunkt benötigt nur noch: title, genre, text
+
+## 16.11.2021:
+- Der Text der Kurzgeschichte ist nun nicht mehr auf 255 Zeichen begrenzt. Neues Maximum: 20 000 Zeichen
+- Der Autorenname ist jetzt auf 20 Zeichen begrenzt
+- Titel sind jetzt auf 50 Zeichen begrenzt
+- Bitte im HTML Zeichencodierung UTF-8 angeben --> <meta charset="utf-8"/>

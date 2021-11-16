@@ -1,5 +1,6 @@
 package de.caro_annemie.kurzgeschichten_kreisel.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -22,6 +23,7 @@ public class User {
   private long id;
 
   @NotBlank
+  @Column(length = 20)
   private String username;
 
   @NotBlank
