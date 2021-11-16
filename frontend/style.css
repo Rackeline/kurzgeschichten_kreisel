@@ -1,7 +1,10 @@
+
 body {
     background-color: bisque;
     max-width: 960px;
     margin: 20px auto;
+    font-family: Helvetica, sans-serif;
+    font-size: large;
 }
 p, ul {
     margin: 0;
@@ -22,15 +25,15 @@ h4, h5 {
 
 
 li {
-    list-style-type: none;
+    /* list-style-type: none;
     background-color: rgb(128, 162, 163);
     margin: 20px auto;
     padding: 10px 20px;
     border-radius: 10px;
     display: flex;
     align-items: center;
-    justify-content:left; 
-    cursor: pointer;
+    justify-content:left;*/ 
+    cursor: pointer; 
 }
 
 
@@ -50,7 +53,7 @@ li p {
 }
 
 ul :hover {
-    background-color: rgb(0, 120, 124);
+    background-color: rgb(83, 138, 141);
 }
 
 button {

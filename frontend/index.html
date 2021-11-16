@@ -15,180 +15,186 @@
 
 <body>
   <div id="app">
-    <h1>Kurzgeschichtenkreisel</h1>
-    <h2>Finde spannende Geschichten und werde selbst Autor!</h2>
-
-    <div v-if="token == false">
-      <div class="col-sm-10">
-        <p class="lead">Melde dich auf der Platform an:</p>
-      </div>
-
-      <form class="form-horizontal" @submit.prevent="login()">
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="author">Name:</label>
-          <div class="col-sm-10">
-            <input v-model="user.username" class="form-control" placeholder="Name"></input>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="password">Passwort:</label>
-          <div class="col-sm-10">
-            <input type="password" minlength="5" required v-model="user.password" class="form-control"
-              placeholder="Passwort"></input>
-          </div>
-        </div>
-
-        <div class="form-group" v-if="regist == true">
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="role">Rolle:</label>
-            <div class="col-sm-10">
-              <select class="form-control" name="role" v-model="user.role">
-                <option value="Author">Autor</option>
-                <option value="Reader">Leser</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="password">Email:</label>
-            <div class="col-sm-10">
-              <input v-model="user.email" placeholder="Email" class="form-control"></textarea>
-            </div>
-          </div>
-          <div class="col-sm-10">
-            <button class="btn btn-success">Absenden</button> <button class="btn btn-default"
-              @click="regist = !regist">Zurück</button>
-          </div>
-        </div>
-
-        <div class="form-group" v-if="regist == false">
-          <div class="col-sm-10">
-            <button class="btn btn-success">Login</button> <button class="btn btn-primary"
-              @click="regist = !regist">Registrieren</button>
-          </div>
-        </div>
-
-      </form>
+    <div class="jumbotron text-center">
+      <h1>Kurzgeschichtenkreisel</h1>
+      <h2>Finde spannende Geschichten und werde selbst Autor!</h2>
     </div>
 
-    <div v-if="token == true">
-      <div>
-        <button class="btn btn-danger" @click="logout()" style="float: right;">Logout</button>
-        <p class="lead" style="float: right;">{{ user.username }}</p>
+    <div class="container">
+      <div v-if="token == false">
+        <div class="col-sm-10">
+          <p class="lead">Melde dich auf der Platform an:</p>
+        </div>
+
+        <form class="form-horizontal" @submit.prevent="login()">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="author">Name:</label>
+            <div class="col-sm-10">
+              <input v-model="user.username" class="form-control" placeholder="Name"></input>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="password">Passwort:</label>
+            <div class="col-sm-10">
+              <input type="password" minlength="5" required v-model="user.password" class="form-control"
+                placeholder="Passwort"></input>
+            </div>
+          </div>
+
+          <div class="form-group" v-if="regist == true">
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="role">Rolle:</label>
+              <div class="col-sm-10">
+                <select class="form-control" name="role" v-model="user.role">
+                  <option value="Author">Autor</option>
+                  <option value="Reader">Leser</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="password">Email:</label>
+              <div class="col-sm-10">
+                <input v-model="user.email" placeholder="Email" class="form-control"></textarea>
+              </div>
+            </div>
+            <div class="col-sm-10">
+              <button class="btn btn-success">Absenden</button> <button class="btn btn-default"
+                @click="regist = !regist">Zurück</button>
+            </div>
+          </div>
+
+          <div class="form-group" v-if="regist == false">
+            <div class="col-sm-10">
+              <button class="btn btn-success">Login</button> <button class="btn btn-primary"
+                @click="regist = !regist">Registrieren</button>
+            </div>
+          </div>
+
+        </form>
       </div>
 
 
-      <div class="form-horizontal" v-if="selector == true">
-        <div class="form-group">
-          <label for="genreSelect" class="col-sm-2 control-label">Genre wählen:</label>
-          <select name="genreSelect" class="form-control" @change="selectGenre()" class="genreSelect"
-            v-model="genreSearch">
-            <option value="">Alle</option>
-            <option value="Romance">Romance</option>
-            <option value="History">History</option>
-            <option value="Fantasy">Fantasy</option>
-            <option value="Crime">Crime</option>
-            <option value="Ratgeber">Ratgeber</option>
-            <option value="Kinder">Kinder</option>
-          </select>
+      <div v-if="token == true">
+        <div class="row float-right mb-2">
+          <button class="btn btn-danger" @click="logout()">Logout</button>
+          <p class="lead" style="float: right;">{{ user.username }}</p>
         </div>
-        <div class="form-group">
-          <form @submit.prevent="searchTitle()">
-            <label for="titleSearch" class="col-sm-2 control-label">Titel suchen:</label>
-            <input type="text" class="form-control" v-model="titleSearch">
 
-          
-             
-                <button class="btn btn-default" @click="Home()">Clear</button> <button
-                  class="btn btn-success">Suchen</button>
-            
-
-          
-
-          </form>
+        <div class="form-horizontal" v-if="selector == true">
+          <div class="form-group">
+            <label for="genreSelect" class="col-sm-2 control-label">Genre wählen:</label>
+            <select name="genreSelect" class="form-control" @change="selectGenre()" class="genreSelect"
+              v-model="genreSearch">
+              <option value="">Alle</option>
+              <option value="Romance">Romance</option>
+              <option value="History">History</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Crime">Crime</option>
+              <option value="Ratgeber">Ratgeber</option>
+              <option value="Kinder">Kinder</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <form @submit.prevent="searchTitle()">
+              <label for="titleSearch" class="col-sm-2 control-label">Titel suchen:</label>
+              <input type="text" class="form-control" v-model="titleSearch">
+              <button class="btn btn-default" @click="Home()">Clear</button> <button
+                class="btn btn-success">Suchen</button>
+            </form>
+          </div>
         </div>
+
 
         <div class="form-group" v-if="role === 'ROLE_Author'">
           <div class="col-sm-offset-2 col-sm-10">
             <div class="checkbox">
               <label for="ownTitles">
-                <input type="checkbox" value="ownTitles" v-model="ownTitles"
-                  @change="showOwnTitles()"> Eigene Titel anzeigen
-              </label> 
+                <input type="checkbox" value="ownTitles" v-model="ownTitles" @change="showOwnTitles()"> Eigene Titel
+                anzeigen
+              </label>
             </div>
           </div>
         </div>
 
 
-      </div>
-
-
-      <div v-if="home == true">
-        <ul>
-          <li v-for="(shortstory, index ) in shortstories"
-            @click="showdetail(shortstory.id, shortstory.title, shortstory.author, shortstory.creationDate, shortstory.genre, shortstory.text)"
-            :key="shortstory.id">
-            <p>Autor: {{ shortstory.author }}</p>
-            <p>Titel: {{ shortstory.title }}</p>
-            <p>Genre: {{ shortstory.genre }}</p>
-          </li>
-        </ul>
-        <div v-if="role === 'ROLE_Author'">
-          <button class="btn btn-primary btn-lg" @click="newStory()">Neu</button>
+        <div class="row" v-if="home == true">
+          <div class="col-md-10">
+            <ul class="list-group">
+              <li class="list-group-item" v-for="(shortstory, index ) in shortstories"
+                @click="showdetail(shortstory.id, shortstory.title, shortstory.author, shortstory.creationDate, shortstory.genre, shortstory.text)"
+                :key="shortstory.id">
+                <div class="row">
+                  <div class="col">
+                    <h4 class="list-group-item-heading">{{ shortstory.title }}</h4>
+                  </div>
+                  <div class="col">
+                    <p class="list-group-item-text">Autor: <strong>{{ shortstory.author }} </strong></p>
+                  </div>
+                  <div class="col">
+                    <p class="list-group-item-text">Genre: <strong>{{ shortstory.genre }}</strong></p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-2">
+            <div v-if="role === 'ROLE_Author'">
+              <button class="btn btn-primary btn-lg" @click="newStory()">Neu</button>
+            </div>
+          </div>
         </div>
 
-      </div>
-
-      <div v-if="read == true">
-        <div class="headText">
-          <h3>{{ shortstory.title }}</h3>
-          <h4>von: {{ shortstory.author}}</h4>
-          <h5>Genre: {{ shortstory.genre }}</h5>
+        <div v-if="read == true">
+          <div class="headText">
+            <h3>{{ shortstory.title }}</h3>
+            <h4>von: {{ shortstory.author}}</h4>
+            <h5>Genre: {{ shortstory.genre }}</h5>
+          </div>
+          <p class="text"> {{ shortstory.text }} </p>
+          <button @click="Home()">Zurück</button>
+          <div v-if="role === 'ROLE_Author' && logindata.username == shortstory.author">
+            <button @click="change()">Ändern</button>
+            <button @click="onDelete(shortstory.id)">Löschen</button>
+          </div>
         </div>
-        <p class="text"> {{ shortstory.text }} </p>
-        <button @click="Home()">Zurück</button>
-        <div v-if="role === 'ROLE_Author' && logindata.username == shortstory.author">
-          <button @click="change()">Ändern</button>
-          <button @click="onDelete(shortstory.id)">Löschen</button>
-        </div>
-      </div>
 
-      <div v-if="changeInput == true">
-        <div>
-          <form class="form-horizontal" @submit.prevent="onChange()">
-            <div class="form-group">
-              <label for="title" class="col-sm-2 control-label">Titel:</label>
-              <div class="col-sm-10">
-                <input v-model="shortstory.title" class="form-control" placeholder="Titel"></input>
+        <div v-if="changeInput == true">
+          <div>
+            <form class="form-horizontal" @submit.prevent="onChange()">
+              <div class="form-group">
+                <label for="title" class="col-sm-2 control-label">Titel:</label>
+                <div class="col-sm-10">
+                  <input v-model="shortstory.title" class="form-control" placeholder="Titel"></input>
+                </div>
               </div>
-            </div>
-            <div class="form-group">
-              <label for="genre" class="col-sm-2 control-label">Genre:</label>
-              <div class="col-sm-10">
-                <select class="form-control" name="genre" class="genreSelect" v-model="shortstory.genre">
-                  <option value="Romance">Romance</option>
-                  <option value="History">History</option>
-                  <option value="Fantasy">Fantasy</option>
-                  <option value="Crime">Crime</option>
-                  <option value="Ratgeber">Ratgeber</option>
-                  <option value="Kinder">Kinder</option>
-                </select>
+              <div class="form-group">
+                <label for="genre" class="col-sm-2 control-label">Genre:</label>
+                <div class="col-sm-10">
+                  <select class="form-control" name="genre" class="genreSelect" v-model="shortstory.genre">
+                    <option value="Romance">Romance</option>
+                    <option value="History">History</option>
+                    <option value="Fantasy">Fantasy</option>
+                    <option value="Crime">Crime</option>
+                    <option value="Ratgeber">Ratgeber</option>
+                    <option value="Kinder">Kinder</option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="form-group">
-              <label for="text" class="col-sm-2 control-label">Text:</label>
-              <div class="col-sm-10">
-                <textarea class="form-control" rows="6" placeholder="Geben Sie hier Ihre Geschichte ein."
-                  v-model="shortstory.text" class="form-control" rows="3"></textarea>
+              <div class="form-group">
+                <label for="text" class="col-sm-2 control-label">Text:</label>
+                <div class="col-sm-10">
+                  <textarea class="form-control" rows="6" placeholder="Geben Sie hier Ihre Geschichte ein."
+                    v-model="shortstory.text" class="form-control" rows="3"></textarea>
+                </div>
               </div>
-            </div>
-            <div class="col-sm-10">
-              <button class="btn btn-success">Speichern</button> <button class="btn btn-default"
-                @click="Home()">Zurück</button>
-            </div>
-          </form>
+              <div class="col-sm-10">
+                <button class="btn btn-success">Speichern</button> <button class="btn btn-default"
+                  @click="Home()">Zurück</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-
     </div>
   </div>
   <!-- Import App -->

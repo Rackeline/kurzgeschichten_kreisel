@@ -42,20 +42,27 @@ const app = Vue.createApp({
                 .get('http://localhost:8080/shortstories/', config)
                 .then((response) => {
                     console.log(response.data)
-                    this.shortstories = response.data
-                    if (response.data.length == 0 && this.user.role == 'ROLE_Author'){
-                        this.selector = false
-                        this.home = false
-                        this.changeInput = true
+                    if (this.role == "ROLE_Author" && response.data.length == 0){
                         alert("Es sind noch keine Einträge vorhanden. Schreiben Sie die erste Geschichte!")
-                    } 
-                    if (response.data.length == 0 && this.user.role == 'ROLE_Reader'){
                         this.selector = false
                         this.home = false
                         this.changeInput = true
+                        
+                    } 
+                    if (this.role == "ROLE_Reader" && response.data.length == 0 ){
                         alert("Es sind noch keine Einträge vorhanden. Kommen Sie zu einem anderen Zeitpunkt wieder!")
                         this.logout()
+                        this.selector = false
+                        this.home = false
+                        this.changeInput = false
+                        
                     } 
+                    if(response.data.length != 0) {
+                        console.log(response.data)
+                        this.shortstories = response.data
+                        this.selector = true
+                        this.home = true
+                    }
                 })
                 .catch((error) => {
                     console.log(error)
@@ -153,13 +160,16 @@ const app = Vue.createApp({
                 this.selector = false
         },
         Home() {
+            if(this.shortstories.length == 0) {
+                this.home = false,
+                this.selector = false
+            }
             this.titleSearch = ''
             this.ownTitles = false
             this.created()
             this.read = false
             this.changeInput = false
-            this.home = true,
-            this.selector = true
+            
             
         },
         Read() {
@@ -295,8 +305,6 @@ const app = Vue.createApp({
                         this.role = localStorage.role
                         this.status = response.status
                         this.logindata = response.data
-                        this.selector = true
-                        this.home = true
                         this.created()
                         console.log(this.role)
                         console.log(localStorage.token)
