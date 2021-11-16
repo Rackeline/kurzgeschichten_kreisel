@@ -2,6 +2,7 @@ package de.caro_annemie.kurzgeschichten_kreisel.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,9 +16,11 @@ public class Shortstory {
     private long id;
 
     @NotBlank
+    @Column(length = 50)
     private String title;
 
     @NotBlank
+    @Column(length = 20)
     private String author;
 
     @NotBlank
@@ -27,6 +30,7 @@ public class Shortstory {
     private Date creationDate;
 
     @NotBlank
+    @Column(length = 20000)
     private String text;
 
     //constructor
