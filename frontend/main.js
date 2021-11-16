@@ -43,6 +43,19 @@ const app = Vue.createApp({
                 .then((response) => {
                     console.log(response.data)
                     this.shortstories = response.data
+                    if (response.data.length == 0 && this.user.role == 'ROLE_Author'){
+                        this.selector = false
+                        this.home = false
+                        this.changeInput = true
+                        alert("Es sind noch keine Einträge vorhanden. Schreiben Sie die erste Geschichte!")
+                    } 
+                    if (response.data.length == 0 && this.user.role == 'ROLE_Reader'){
+                        this.selector = false
+                        this.home = false
+                        this.changeInput = true
+                        alert("Es sind noch keine Einträge vorhanden. Kommen Sie zu einem anderen Zeitpunkt wieder!")
+                        this.logout()
+                    } 
                 })
                 .catch((error) => {
                     console.log(error)
@@ -234,22 +247,37 @@ const app = Vue.createApp({
         },
         login() {
             if (this.regist == true) {
-                let postregister = {
+                if (this.user.username == '' || this.user.role == '' || this.user.password == '' || this.user.email == '') {
+                    alert('Fehlende Pflichtfelder')
+                } else {
+                    let postregister = {
                     username: this.user.username,
                     role: this.user.role,
                     password: this.user.password,
                     email: this.user.email
-                }
-                console.log(postregister)
-                axios.post("http://localhost:8080/user/register",
+                    }
+                    console.log(postregister)
+                    axios.post("http://localhost:8080/user/register",
                     postregister)
                     .then(result => {
                         console.log(result)
                         this.regist = false
                         this.statuscode = result.status
+                        if(result.status == 200){
+                           this.regist = false
+                           alert('Willkommen ' + this.user.username + '.Sie wurden registriert.')
+                           this.login()
+                        }
                     })
-                    .catch(error =>
-                        console.log(error))
+                    .catch(error => {
+                        console.log(error.response)
+                        if(error.response.status == 400){
+                            alert('Name/ Email existiert schon!')
+                        }
+                        this.user.username = ''
+                        this.user.email = ''
+                    })
+                }  
             }
             if (this.regist == false) {
                 let postlogin = {
