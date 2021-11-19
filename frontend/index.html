@@ -29,13 +29,13 @@
         <form class="form-horizontal" @submit.prevent="login()">
           <div class="form-group">
             <label class="col-sm-2 control-label" for="author">Name:</label>
-            <div class="col-sm-10">
+            <div class="col-sm-12">
               <input v-model="user.username" class="form-control" placeholder="Name"></input>
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-2 control-label" for="password">Passwort:</label>
-            <div class="col-sm-10">
+            <div class="col-sm-12">
               <input type="password" minlength="5" required v-model="user.password" class="form-control"
                 placeholder="Passwort"></input>
             </div>
@@ -44,7 +44,7 @@
           <div class="form-group" v-if="regist == true">
             <div class="form-group">
               <label class="col-sm-2 control-label" for="role">Rolle:</label>
-              <div class="col-sm-10">
+              <div class="col-sm-12">
                 <select class="form-control" name="role" v-model="user.role">
                   <option value="Author">Autor</option>
                   <option value="Reader">Leser</option>
@@ -53,18 +53,18 @@
             </div>
             <div class="form-group">
               <label class="col-sm-2 control-label" for="password">Email:</label>
-              <div class="col-sm-10">
+              <div class="col-sm-12">
                 <input v-model="user.email" placeholder="Email" class="form-control"></textarea>
               </div>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-12">
               <button class="btn btn-success">Absenden</button> <button class="btn btn-default"
                 @click="regist = !regist">Zurück</button>
             </div>
           </div>
 
           <div class="form-group" v-if="regist == false">
-            <div class="col-sm-10">
+            <div class="col-sm-12">
               <button class="btn btn-success">Login</button> <button class="btn btn-primary"
                 @click="regist = !regist">Registrieren</button>
             </div>
@@ -75,86 +75,107 @@
 
 
       <div v-if="token == true">
-        <div class="row float-right mb-2">
-          <button class="btn btn-danger" @click="logout()">Logout</button>
-          <p class="lead" style="float: right;">{{ user.username }}</p>
+        <div class="row justify-content-end">
+
+          <div class="breadcrumb">
+            <h5 class="mr-2">{{ user.username }}</h5>
+
+            <div v-if="role === 'ROLE_Author'">
+              <button class="btn btn-primary mr-2" @click="newStory()">Neu +</button>
+            </div>
+            <button class="btn btn-danger" @click="logout()">Logout</button>
+          </div>
+
+
         </div>
 
         <div class="form-horizontal" v-if="selector == true">
           <div class="form-group">
-            <label for="genreSelect" class="col-sm-2 control-label">Genre wählen:</label>
-            <select name="genreSelect" class="form-control" @change="selectGenre()" class="genreSelect"
-              v-model="genreSearch">
-              <option value="">Alle</option>
-              <option value="Romance">Romance</option>
-              <option value="History">History</option>
-              <option value="Fantasy">Fantasy</option>
-              <option value="Crime">Crime</option>
-              <option value="Ratgeber">Ratgeber</option>
-              <option value="Kinder">Kinder</option>
-            </select>
-          </div>
-          <div class="form-group">
+            <div class="row">
+              <label for="genreSelect" class="control-label">Genre wählen:</label>
+            </div>
+            <div class="row mb-2">
+              <select name="genreSelect" class="form-control" @change="selectGenre()" class="genreSelect"
+                v-model="genreSearch">
+                <option value="">Alle</option>
+                <option value="Romance">Romance</option>
+                <option value="History">History</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Crime">Crime</option>
+                <option value="Ratgeber">Ratgeber</option>
+                <option value="Kinder">Kinder</option>
+              </select>
+            </div>
+
             <form @submit.prevent="searchTitle()">
-              <label for="titleSearch" class="col-sm-2 control-label">Titel suchen:</label>
-              <input type="text" class="form-control" v-model="titleSearch">
-              <button class="btn btn-default" @click="Home()">Clear</button> <button
-                class="btn btn-success">Suchen</button>
+              <div class="row">
+                <label for="titleSearch" class="control-label">Titel suchen:</label>
+              </div>
+              <div class="row">
+                <input type="text" class="form-control" v-model="titleSearch">
+              </div>
+              <div class="row mt-2 mb-2">
+                <button class="btn btn-success">Suchen</button><button class="ml-2 btn btn-default"
+                  @click="Home()">Clear</button>
+              </div>
             </form>
-          </div>
-        </div>
 
-
-        <div class="form-group" v-if="role === 'ROLE_Author'">
-          <div class="col-sm-offset-2 col-sm-10">
-            <div class="checkbox">
-              <label for="ownTitles">
-                <input type="checkbox" value="ownTitles" v-model="ownTitles" @change="showOwnTitles()"> Eigene Titel
-                anzeigen
-              </label>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="row" v-if="home == true">
-          <div class="col-md-10">
-            <ul class="list-group">
-              <li class="list-group-item" v-for="(shortstory, index ) in shortstories"
-                @click="showdetail(shortstory.id, shortstory.title, shortstory.author, shortstory.creationDate, shortstory.genre, shortstory.text)"
-                :key="shortstory.id">
-                <div class="row">
-                  <div class="col">
-                    <h4 class="list-group-item-heading">{{ shortstory.title }}</h4>
-                  </div>
-                  <div class="col">
-                    <p class="list-group-item-text">Autor: <strong>{{ shortstory.author }} </strong></p>
-                  </div>
-                  <div class="col">
-                    <p class="list-group-item-text">Genre: <strong>{{ shortstory.genre }}</strong></p>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <div class="col-md-2">
             <div v-if="role === 'ROLE_Author'">
-              <button class="btn btn-primary btn-lg" @click="newStory()">Neu</button>
+              <div class="row">
+                <div class="checkbox">
+                  <label for="ownTitles">
+                    <input type="checkbox" value="ownTitles" v-model="ownTitles" @change="showOwnTitles()">
+                    Eigene Titel anzeigen
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+
+
+
+
+
+        <div v-if="home == true">
+          <ul class="list-group">
+            <li class="list-group-item" v-for="(shortstory, index ) in shortstories"
+              @click="showdetail(shortstory.id, shortstory.title, shortstory.author, shortstory.creationDate, shortstory.genre, shortstory.text)"
+              :key="shortstory.id">
+              <div class="row ">
+                <div class="col-6">
+                  <h4 class="">{{ shortstory.title }}</h4>
+                </div>
+                <div class="col-4">
+                  <p class=""> <strong>{{ shortstory.author }} </strong></p>
+                </div>
+                <div class="col-2">
+                  <p class=""> {{ shortstory.genre }}</p>
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
 
         <div v-if="read == true">
-          <div class="headText">
-            <h3>{{ shortstory.title }}</h3>
-            <h4>von: {{ shortstory.author}}</h4>
-            <h5>Genre: {{ shortstory.genre }}</h5>
+          <div class="row justify-content-between">
+            <div class="col-6">
+              <h3>{{ shortstory.title }}</h3>
+              <p><em>{{ shortstory.author}}</em></p>
+              <p>Genre: {{ shortstory.genre }}</p>
+            </div>
+            <div class="col-2">
+              <button class="btn btn-default" @click="Home()">Zurück</button>
+            </div>
           </div>
-          <p class="text"> {{ shortstory.text }} </p>
-          <button @click="Home()">Zurück</button>
+          <div class="row">
+            <blockquote class="col-12 blockquote text">
+              <p class="mb-0">{{ shortstory.text }}</p>
+            </blockquote>
+          </div>
           <div v-if="role === 'ROLE_Author' && logindata.username == shortstory.author">
-            <button @click="change()">Ändern</button>
-            <button @click="onDelete(shortstory.id)">Löschen</button>
+            <button class="btn btn-success mr-2" @click="change()">Ändern</button>
+            <button class="btn btn-danger" @click="onDelete(shortstory.id)">Löschen</button>
           </div>
         </div>
 
@@ -162,14 +183,14 @@
           <div>
             <form class="form-horizontal" @submit.prevent="onChange()">
               <div class="form-group">
-                <label for="title" class="col-sm-2 control-label">Titel:</label>
-                <div class="col-sm-10">
+                <label for="title" class="col control-label">Titel:</label>
+                <div class="col">
                   <input v-model="shortstory.title" class="form-control" placeholder="Titel"></input>
                 </div>
               </div>
               <div class="form-group">
-                <label for="genre" class="col-sm-2 control-label">Genre:</label>
-                <div class="col-sm-10">
+                <label for="genre" class="col control-label">Genre:</label>
+                <div class="col">
                   <select class="form-control" name="genre" class="genreSelect" v-model="shortstory.genre">
                     <option value="Romance">Romance</option>
                     <option value="History">History</option>
@@ -181,13 +202,13 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="text" class="col-sm-2 control-label">Text:</label>
-                <div class="col-sm-10">
-                  <textarea class="form-control" rows="6" placeholder="Geben Sie hier Ihre Geschichte ein."
+                <label for="text" class="col control-label">Text:</label>
+                <div class="col">
+                  <textarea class="form-control" rows="10" placeholder="Geben Sie hier Ihre Geschichte ein."
                     v-model="shortstory.text" class="form-control" rows="3"></textarea>
                 </div>
               </div>
-              <div class="col-sm-10">
+              <div class="col">
                 <button class="btn btn-success">Speichern</button> <button class="btn btn-default"
                   @click="Home()">Zurück</button>
               </div>
