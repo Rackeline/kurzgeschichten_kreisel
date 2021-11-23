@@ -1,6 +1,5 @@
 
 body {
-   
     max-width: 960px;
     margin: 20px auto;
     font-family: Helvetica, sans-serif;
@@ -10,15 +9,6 @@ p, ul {
  margin: 0;
     padding: 0; 
 }
-
-.headText {
-    /* margin-top: 40px; */
-}
-h3, h4, h5,.date {
-    /* margin: 5px auto;
-    padding: 10px 20px;
-    border-radius: 10px; */
-}
 h4, h5 {
     font-weight: 300;
 }
@@ -26,17 +16,7 @@ h5 {
     margin-top: 0.5rem;
 }
 
-
 li {
-    
-    /* list-style-type: none;
-    background-color: rgb(128, 162, 163);
-    
-    padding: 10px 20px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content:left;*/ 
     cursor: pointer; 
 }
 
@@ -51,13 +31,6 @@ li p {
     border-radius: 10px;
     align-items:center;
     justify-content:left;
-    /* 
-    
-    display: flex;
-    
-    
-    font-size: 1.3em;
-    line-height: 1.5; */
 }
 
 ul :hover {
