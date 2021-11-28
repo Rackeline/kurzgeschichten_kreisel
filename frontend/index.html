@@ -17,7 +17,7 @@
   <div id="app">
     <div class="jumbotron text-center">
       <h1>Kurzgeschichtenkreisel</h1>
-      <h2>Finde spannende Geschichten oder werde selbst Autor!</h2>
+      <h2>Finde spannende Geschichten oder werde selbst Autor</h2>
     </div>
 
     <div class="container">
@@ -75,9 +75,8 @@
 
 
       <div v-if="token == true">
-        <div class="row justify-content-end">
-
-          <div class="breadcrumb">
+        <div>
+          <div class="breadcrumb" style="float: right;">
             <h5 class="mr-2">{{ user.username }}</h5>
 
             <div v-if="role === 'ROLE_Author'">
@@ -85,16 +84,14 @@
             </div>
             <button class="btn btn-danger" @click="logout()">Logout</button>
           </div>
-
-
         </div>
 
-        <div class="form-horizontal" v-if="selector == true">
+        <div class="form-horizontal" style="clear: both;" v-if="selector == true">
           <div class="form-group">
-            <div class="row">
+            <div class="">
               <label for="genreSelect" class="control-label">Genre wählen:</label>
             </div>
-            <div class="row mb-2">
+            <div class="mb-2">
               <select name="genreSelect" class="form-control" @change="selectGenre()" class="genreSelect"
                 v-model="genreSearch">
                 <option value="">Alle</option>
@@ -108,20 +105,20 @@
             </div>
 
             <form @submit.prevent="searchTitle()">
-              <div class="row">
+              <div class="">
                 <label for="titleSearch" class="control-label">Titel suchen:</label>
               </div>
-              <div class="row">
+              <div class="">
                 <input type="text" class="form-control" v-model="titleSearch">
               </div>
-              <div class="row mt-2 mb-2">
+              <div class="mt-2 mb-2">
                 <button class="btn btn-success">Suchen</button><button class="ml-2 btn btn-default"
                   @click="Home()">Clear</button>
               </div>
             </form>
 
             <div v-if="role === 'ROLE_Author'">
-              <div class="row">
+              <div class="">
                 <div class="checkbox">
                   <label for="ownTitles">
                     <input type="checkbox" value="ownTitles" v-model="ownTitles" @change="showOwnTitles()">
@@ -158,18 +155,18 @@
         </div>
 
         <div v-if="read == true">
-          <div class="row justify-content-between">
-            <div class="col-6">
+          <div class="row" style="clear: both;">
+            <div class="col-10">
               <h3>{{ shortstory.title }}</h3>
               <p><em>{{ shortstory.author}}</em></p>
               <p>Genre: {{ shortstory.genre }}</p>
             </div>
             <div class="col-2">
-              <button class="btn btn-default" @click="Home()">Zurück</button>
+              <button class="btn btn-default" style="float: right;" @click="Home()">Zurück</button>
             </div>
           </div>
           <div class="row">
-            <blockquote class="col-12 blockquote text">
+            <blockquote class="col-12 blockquote mt-4">
               <p class="mb-0">{{ shortstory.text }}</p>
             </blockquote>
           </div>
