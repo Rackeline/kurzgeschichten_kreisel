@@ -13,7 +13,7 @@ import de.caro_annemie.kurzgeschichten_kreisel.model.Shortstory;
 public interface ShortstoryRepository extends JpaRepository<Shortstory, Long> {
    
     //doesn't get limit
-    @Query("SELECT s FROM Shortstory s WHERE s.title = ?1 ORDER BY s.id DESC")
+    @Query(value = "SELECT * FROM Shortstory s WHERE s.title ILIKE CONCAT('%', ?1, '%') ORDER BY s.id DESC", nativeQuery = true)
     List<Shortstory> findByTitle(String title);
 
     @Query("SELECT s FROM Shortstory s WHERE s.genre = ?1 ORDER BY s.id DESC")
@@ -26,7 +26,7 @@ public interface ShortstoryRepository extends JpaRepository<Shortstory, Long> {
     List<Shortstory> findAll();
     
     //gets limit
-    @Query(value = "SELECT * FROM shortstory WHERE title = ?1 ORDER BY id DESC LIMIT ?2", nativeQuery = true)
+    @Query(value = "SELECT * FROM Shortstory s WHERE s.title ILIKE CONCAT('%', ?1, '%') ORDER BY s.id DESC LIMIT ?2", nativeQuery = true)
     List<Shortstory> findByTitle(String title, Integer limit);
 
     @Query(value = "SELECT * FROM shortstory WHERE genre = ?1 ORDER BY id DESC LIMIT ?2", nativeQuery = true)
