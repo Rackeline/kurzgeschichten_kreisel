@@ -3,8 +3,9 @@
 
 <head>
   <meta charset="utf-8" />
+  <link rel="shortcut icon" type="image/png" href="favicon.png"/>
   <title>Kurzgeschichtenkreisel</title>
-  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://unpkg.com/vue@3.2.23/dist/vue.global.prod.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js"
     integrity="sha512-lTLt+W7MrmDfKam+r3D2LURu0F47a3QaW5nF0c6Hl0JDZ57ruei+ovbg7BrZ+0bjVJ5YgzsAWE+RreERbpPE1g=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -73,7 +74,6 @@
         </form>
       </div>
 
-
       <div v-if="token == true">
         <div>
           <div class="breadcrumb" style="float: right;">
@@ -129,11 +129,6 @@
             </div>
           </div>
         </div>
-
-
-
-
-
         <div v-if="home == true">
           <ul class="list-group">
             <li class="list-group-item" v-for="(shortstory, index ) in shortstories"
@@ -141,13 +136,29 @@
               :key="shortstory.id">
               <div class="row ">
                 <div class="col-6">
-                  <h4 class="">{{ shortstory.title }}</h4>
+                  <div v-if="shortstory.author == user.username">
+                    <h4 style="color: blue">{{ shortstory.title }}</h4>
+                  </div>
+                  <div v-else>
+                    <h4 style="color: black">{{ shortstory.title }}</h4>
+                  </div>
                 </div>
                 <div class="col-4">
-                  <p class=""> <strong>{{ shortstory.author }} </strong></p>
+                  <div v-if="shortstory.author == user.username">
+                    <p style="color: blue"> <strong>{{ shortstory.author }} </strong></p>
+                  </div>
+                  <div v-else>
+                    <p style="color: black;"> <strong>{{ shortstory.author }} </strong></p>
+                  </div>
                 </div>
                 <div class="col-2">
-                  <p class=""> {{ shortstory.genre }}</p>
+                  <div v-if="shortstory.author == user.username">
+                    <p style="color: blue"> {{ shortstory.genre }}</p>
+                  </div>
+                  <div v-else>
+                    <p style="color: black"> {{ shortstory.genre }}</p>
+                  </div>
+                  
                 </div>
               </div>
             </li>

@@ -75,7 +75,7 @@ const app = Vue.createApp({
             this.shortstory.creationDate = creationDate
             this.shortstory.genre = genre
             this.shortstory.text = text
-            console.log("selectet: ", this.shortstory.id)
+            //console.log("selectet: ", this.shortstory.id)
             this.Read()
         },
         onPost() {
@@ -95,7 +95,7 @@ const app = Vue.createApp({
                     creationDate: new Date(Date.now()),
                     text: this.shortstory.text
                 }
-                console.log(post)
+                //console.log(post)
                 axios.post("http://localhost:8080/shortstories",
                     post, config)
                     .then(result => {
@@ -110,7 +110,7 @@ const app = Vue.createApp({
         },
         onChange() {
             if (this.shortstory.id == '') {
-                console.log(this.shortstory.title, this.shortstory.text)
+                //console.log(this.shortstory.title, this.shortstory.text)
                 this.onPost()
             }
             if (this.shortstory.id != '') {
@@ -188,7 +188,7 @@ const app = Vue.createApp({
             this.change()
         },
         selectGenre() {
-            console.log(this.genreSearch)
+            //console.log(this.genreSearch)
             if (this.genreSearch == "") {
                 this.created()
             }
@@ -201,7 +201,7 @@ const app = Vue.createApp({
                     .get('http://localhost:8080/shortstories/', config)
                     .then((response) => {
                         console.log(response.data)
-                        console.log(localStorage.token)
+                        //console.log(localStorage.token)
                         this.shortstories = response.data
                     })
                     .catch((error) => {
@@ -245,7 +245,7 @@ const app = Vue.createApp({
                     .get('http://localhost:8080/shortstories/', config)
                     .then((response) => {
                         console.log(response.data)
-                        console.log(localStorage.token)
+                        //console.log(localStorage.token)
                         this.shortstories = response.data
                     })
                     .catch((error) => {
@@ -266,7 +266,7 @@ const app = Vue.createApp({
                     password: this.user.password,
                     email: this.user.email
                     }
-                    console.log(postregister)
+                    //console.log(postregister)
                     axios.post("http://localhost:8080/user/register",
                     postregister)
                     .then(result => {
@@ -294,7 +294,7 @@ const app = Vue.createApp({
                     username: this.user.username,
                     password: this.user.password
                 }
-                console.log(postlogin)
+                //console.log(postlogin)
                 axios.post("http://localhost:8080/user/login",
                     postlogin)
                     .then((response) => {
@@ -306,8 +306,8 @@ const app = Vue.createApp({
                         this.status = response.status
                         this.logindata = response.data
                         this.created()
-                        console.log(this.role)
-                        console.log(localStorage.token)
+                        //console.log(this.role)
+                        //console.log(localStorage.token)
                         
                     })
                     .catch(error => {
