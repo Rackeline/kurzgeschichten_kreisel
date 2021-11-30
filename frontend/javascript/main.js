@@ -41,7 +41,7 @@ const app = Vue.createApp({
             axios
                 .get('http://localhost:8080/shortstories/', config)
                 .then((response) => {
-                    console.log(response.data)
+                    //console.log(response.data)
                     if (this.role == "ROLE_Author" && response.data.length == 0){
                         alert("Es sind noch keine Einträge vorhanden. Schreiben Sie die erste Geschichte!")
                         this.selector = false
