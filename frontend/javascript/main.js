@@ -317,8 +317,7 @@ const app = Vue.createApp({
                         }
                         this.user.username = ''
                         this.user.password = ''
-                    })
-                    
+                    })           
             }
         },
         logout(){

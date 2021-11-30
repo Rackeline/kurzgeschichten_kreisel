@@ -5,10 +5,13 @@
   <meta charset="utf-8" />
   <link rel="shortcut icon" type="image/png" href="/frontend/image/favicon.png"/>
   <title>Kurzgeschichtenkreisel</title>
+  <!-- Import Vue.js -->
   <script src="/frontend/javascript/vue.global.prod.js"></script>
+  <!-- Import Axios library -->
   <script src="/frontend/javascript/axios.min.js"
     integrity="sha512-lTLt+W7MrmDfKam+r3D2LURu0F47a3QaW5nF0c6Hl0JDZ57ruei+ovbg7BrZ+0bjVJ5YgzsAWE+RreERbpPE1g=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Import CSS -->
   <link rel="stylesheet" href="/frontend/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link href="/frontend/css/style.css" rel="stylesheet">
@@ -16,17 +19,19 @@
 
 <body>
   <div id="app">
+     <!-- start title-->
     <div class="jumbotron text-center">
       <h1>Kurzgeschichtenkreisel</h1>
       <h2>Finde spannende Geschichten oder werde selbst Autor</h2>
     </div>
+    <!-- end title-->
 
     <div class="container">
+    <!-- start login / register-->
       <div v-if="token == false">
         <div class="col-sm-10">
           <p class="lead">Melde dich auf der Platform an:</p>
         </div>
-
         <form class="form-horizontal" @submit.prevent="login()">
           <div class="form-group">
             <label class="col-sm-2 control-label" for="author">Name:</label>
@@ -41,7 +46,6 @@
                 placeholder="Passwort"></input>
             </div>
           </div>
-
           <div class="form-group" v-if="regist == true">
             <div class="form-group">
               <label class="col-sm-2 control-label" for="role">Rolle:</label>
@@ -63,32 +67,33 @@
                 @click="regist = !regist">Zurück</button>
             </div>
           </div>
-
           <div class="form-group" v-if="regist == false">
             <div class="col-sm-12">
               <button class="btn btn-success">Login</button> <button class="btn btn-primary"
                 @click="regist = !regist">Registrieren</button>
             </div>
           </div>
-
         </form>
       </div>
+    <!-- end login / register-->
 
+    <!-- start user area top-->
       <div v-if="token == true">
         <div>
           <div class="breadcrumb" style="float: right;">
             <h5 class="mr-2">{{ user.username }}</h5>
-
             <div v-if="role === 'ROLE_Author'">
               <button class="btn btn-primary mr-2" @click="newStory()">Neu +</button>
             </div>
             <button class="btn btn-danger" @click="logout()">Logout</button>
           </div>
         </div>
+    <!-- end user area top-->
 
+    <!-- start select field-->
         <div class="form-horizontal" style="clear: both;" v-if="selector == true">
           <div class="form-group">
-            <div class="">
+            <div>
               <label for="genreSelect" class="control-label">Genre wählen:</label>
             </div>
             <div class="mb-2">
@@ -103,12 +108,11 @@
                 <option value="Kinder">Kinder</option>
               </select>
             </div>
-
             <form @submit.prevent="searchTitle()">
-              <div class="">
+              <div>
                 <label for="titleSearch" class="control-label">Titel suchen:</label>
               </div>
-              <div class="">
+              <div>
                 <input type="text" class="form-control" v-model="titleSearch">
               </div>
               <div class="mt-2 mb-2">
@@ -116,9 +120,8 @@
                   @click="Home()">Clear</button>
               </div>
             </form>
-
             <div v-if="role === 'ROLE_Author'">
-              <div class="">
+              <div>
                 <div class="checkbox">
                   <label for="ownTitles">
                     <input type="checkbox" value="ownTitles" v-model="ownTitles" @change="showOwnTitles()">
@@ -129,6 +132,9 @@
             </div>
           </div>
         </div>
+        <!-- end select field-->
+
+        <!-- start List shortstories -->
         <div v-if="home == true">
           <ul class="list-group">
             <li class="list-group-item" v-for="(shortstory, index ) in shortstories"
@@ -164,7 +170,9 @@
             </li>
           </ul>
         </div>
+        <!-- end List shortstories -->
 
+        <!-- start read mode -->
         <div v-if="read == true">
           <div class="row" style="clear: both;">
             <div class="col-10">
@@ -181,12 +189,16 @@
               <p class="mb-0">{{ shortstory.text }}</p>
             </blockquote>
           </div>
+          <!-- start change mode -->
           <div v-if="role === 'ROLE_Author' && logindata.username == shortstory.author">
             <button class="btn btn-success mr-2" @click="change()">Ändern</button>
             <button class="btn btn-danger" @click="onDelete(shortstory.id)">Löschen</button>
           </div>
+          <!-- end change mode -->
         </div>
+        <!-- end read mode -->
 
+        <!-- start input mode -->
         <div v-if="changeInput == true">
           <div>
             <form class="form-horizontal" @submit.prevent="onChange()">
@@ -223,6 +235,7 @@
             </form>
           </div>
         </div>
+        <!-- end input mode -->
       </div>
     </div>
   </div>
