@@ -187,53 +187,65 @@ const app = Vue.createApp({
             this.shortstory.text = ''
             this.change()
         },
-        selectGenre() {
-            //console.log(this.genreSearch)
-            if (this.genreSearch == "") {
-                this.created()
-            }
-            else {
-                let config = {
-                    params: { genre: this.genreSearch },
+        search() {
+            let config = {}
+            if (this.authorSearch != ''){
+                config = {
+                    params: {author: this.authorSearch },
                     headers: { Authorization: 'Bearer ' + localStorage.token }
                 }
-                axios
-                    .get('http://localhost:8080/shortstories/', config)
-                    .then((response) => {
-                        console.log(response.data)
-                        //console.log(localStorage.token)
-                        this.shortstories = response.data
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                    })
             }
+            if (this.titleSearch != ''){
+                config = {
+                    params: { title: this.titleSearch},
+                    headers: { Authorization: 'Bearer ' + localStorage.token }
+                }
+            }
+            if (this.genreSearch != ''){
+                if (this.authorSearch != '') {
+                    config = {
+                        params: { genre: this.genreSearch, author: this.authorSearch},
+                        headers: { Authorization: 'Bearer ' + localStorage.token }
+                    } 
+                }
+                if (this.titleSearch != ''){
+                    config = {
+                        params: { genre: this.genreSearch, title: this.titleSearch},
+                        headers: { Authorization: 'Bearer ' + localStorage.token }
+                    } 
+                }
+                else {
+                   config = {
+                    params: { genre: this.genreSearch},
+                    headers: { Authorization: 'Bearer ' + localStorage.token }
+                } 
+                }
+                
+            }
+            if (this.authorSearch == '' && this.genreSearch == '' && this.titleSearch == ''){
+                config = {
+                    params: { limit: 10},
+                    headers: { Authorization: 'Bearer ' + localStorage.token }
+                }
+            }
+            console.log(config)
+            axios
+                .get('http://localhost:8080/shortstories/', config)
+                .then((response) => {
+                    console.log(response.data)
+                    this.titleSearch = ''
+                    this.genreSearch = ''
+                    this.authorSearch = ''
+                    this.shortstories = response.data
+                    if (response.data.length == 0) {
+                        alert('Eintrag nicht gefunden.')
+                        this.Home()
+                    }
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
 
-        },
-        searchTitle() {
-            if (this.titleSearch == "") {
-                this.created()
-            }
-            else {
-                let config = {
-                    params: { title: this.titleSearch },
-                    headers: { Authorization: 'Bearer ' + localStorage.token }
-                }
-                axios
-                    .get('http://localhost:8080/shortstories/', config)
-                    .then((response) => {
-                        console.log(response.data)
-                        this.titleSearch = ''
-                        this.shortstories = response.data
-                        if (response.data.length == 0) {
-                            alert('Titel nicht gefunden.')
-                            this.Home()
-                        }
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                    })
-            }
         },
         showOwnTitles(){
             if(this.ownTitles == true){
@@ -322,6 +334,7 @@ const app = Vue.createApp({
         },
         logout(){
             this.token = false
+            this.home = false
             this.role = ''
             this.user.username = ''
             this.user.password = ''
