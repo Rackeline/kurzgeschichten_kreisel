@@ -26,14 +26,14 @@ public class ShortstoryController {
 
   // --------------URL mappings------------------
 
-  //create shortstory in database
+  //create shortstory in database Übergibt das Shortstory-Objekt dem ShortstoryService zur Ablage in der Datenbank
   @PostMapping("/shortstories")
   @PreAuthorize("hasRole('Author')")
   public Shortstory create(@RequestBody Shortstory shortstory) {
     return shortstoryService.create(shortstory);
   }
 
-  //change shortstory
+  //change shortstory Übergibt das Shortstory-Objekt dem ShortstoryService zur Ersetzung eines bestehenden Objekts in der Datenbank
   @PutMapping("/shortstories/{id}")
   @PreAuthorize("hasRole('Author')")
   Shortstory replace(

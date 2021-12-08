@@ -1,9 +1,10 @@
 package de.caro_annemie.kurzgeschichten_kreisel.services;
 
 import de.caro_annemie.kurzgeschichten_kreisel.ShortstoryNotFoundException;
-import de.caro_annemie.kurzgeschichten_kreisel.ShortstoryRepository;
+import de.caro_annemie.kurzgeschichten_kreisel.model.SecurityUserDetails;
 import de.caro_annemie.kurzgeschichten_kreisel.model.Shortstory;
-import de.caro_annemie.kurzgeschichten_kreisel.security.UserDetailsImpl;
+import de.caro_annemie.kurzgeschichten_kreisel.repositories.ShortstoryRepository;
+
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class ShortstoryService {
   public Shortstory create(Shortstory shortstory) {
     // Get security context and extract user details
     var securityContext = SecurityContextHolder.getContext();
-    var userDetails = (UserDetailsImpl) securityContext
+    var userDetails = (SecurityUserDetails) securityContext
       .getAuthentication()
       .getPrincipal();
 
@@ -74,8 +75,7 @@ public class ShortstoryService {
   }
 
   /**
-   * Returns a list of Shortystory objects based on given search parameters. At least
-   * one of the parameters title, genre or author must be set.
+   * Returns a list of Shortystory objects based on given search parameters. If no parameter ist set, a list of all entries will be returned.
    * @param title (Optional) Title of the shortstory to look for
    * @param genre (Optional) Genre of the shortstory to look for
    * @param author (Optional) Author of the shortstory to look for

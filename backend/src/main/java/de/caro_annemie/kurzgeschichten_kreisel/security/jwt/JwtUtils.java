@@ -1,6 +1,5 @@
 package de.caro_annemie.kurzgeschichten_kreisel.security.jwt;
 
-import de.caro_annemie.kurzgeschichten_kreisel.security.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import java.util.Date;
 import org.slf4j.Logger;
@@ -8,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+
+import de.caro_annemie.kurzgeschichten_kreisel.model.SecurityUserDetails;
 
 /**
  * helper methods to use JsonWebToken
@@ -24,7 +25,7 @@ public class JwtUtils {
 
   //make JsonWebToken from authentication object
   public String generateJwtToken(Authentication authentication) {
-    UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+    SecurityUserDetails userPrincipal = (SecurityUserDetails) authentication.getPrincipal();
 
     return Jwts
       .builder()

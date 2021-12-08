@@ -1,7 +1,7 @@
-package de.caro_annemie.kurzgeschichten_kreisel.security;
+package de.caro_annemie.kurzgeschichten_kreisel.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import de.caro_annemie.kurzgeschichten_kreisel.model.User;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -10,7 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class UserDetailsImpl implements UserDetails {
+public class SecurityUserDetails implements UserDetails {
   private static final long serialVersionUID = 1L;
 
   @JsonIgnore
@@ -28,7 +28,7 @@ public class UserDetailsImpl implements UserDetails {
   private Collection<? extends GrantedAuthority> authorities;
 
   //constructor
-  public UserDetailsImpl(
+  public SecurityUserDetails(
     Long id,
     String username,
     String email,
@@ -43,14 +43,14 @@ public class UserDetailsImpl implements UserDetails {
   }
 
   //macht aus User ein UserDetails
-  public static UserDetailsImpl build(User user) {
+  public static SecurityUserDetails build(User user) {
 	  // legt ListObjekt zur Speicherung der Rollen an
     List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
 	  //fügt Rolle des User Objekts zu Liste hinzu
     authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
 
-    return new UserDetailsImpl(
+    return new SecurityUserDetails(
       user.getId(),
       user.getUsername(),
       user.getEmail(),
@@ -108,7 +108,7 @@ public class UserDetailsImpl implements UserDetails {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    UserDetailsImpl user = (UserDetailsImpl) o;
+    SecurityUserDetails user = (SecurityUserDetails) o;
     return Objects.equals(id, user.id);
   }
 }

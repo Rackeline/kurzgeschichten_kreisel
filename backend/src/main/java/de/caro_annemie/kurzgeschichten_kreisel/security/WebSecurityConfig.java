@@ -1,8 +1,9 @@
-package de.caro_annemie.kurzgeschichten_kreisel;
+package de.caro_annemie.kurzgeschichten_kreisel.security;
 
-import de.caro_annemie.kurzgeschichten_kreisel.security.UserDetailsServiceImpl;
 import de.caro_annemie.kurzgeschichten_kreisel.security.jwt.AuthEntryPointJwt;
 import de.caro_annemie.kurzgeschichten_kreisel.security.jwt.AuthTokenFilter;
+import de.caro_annemie.kurzgeschichten_kreisel.services.AuthService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
-  UserDetailsServiceImpl userDetailsService;
+  AuthService userDetailsService;
 
   @Autowired
   private AuthEntryPointJwt unauthorizedHandler;

@@ -27,12 +27,15 @@ public class User {
   private String username;
 
   @NotBlank
+  @Column(length = 50)
   private String role;
 
   @NotBlank
+  @Column(length = 20)
   private String password;
 
   @NotBlank
+  @Column(length = 50)
   private String email;
 
   //constructor

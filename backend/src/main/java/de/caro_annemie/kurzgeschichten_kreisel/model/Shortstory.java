@@ -24,6 +24,7 @@ public class Shortstory {
     private String author;
 
     @NotBlank
+    @Column(length = 50)
     private String genre;
 
     @NotNull

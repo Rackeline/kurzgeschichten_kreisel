@@ -1,4 +1,4 @@
-package de.caro_annemie.kurzgeschichten_kreisel;
+package de.caro_annemie.kurzgeschichten_kreisel.repositories;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;

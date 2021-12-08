@@ -1,23 +1,14 @@
 package de.caro_annemie.kurzgeschichten_kreisel.controller;
 
-import de.caro_annemie.kurzgeschichten_kreisel.UserRepository;
-import de.caro_annemie.kurzgeschichten_kreisel.model.User;
-import de.caro_annemie.kurzgeschichten_kreisel.model.payload.JwtResponse;
 import de.caro_annemie.kurzgeschichten_kreisel.model.payload.LoginRequest;
 import de.caro_annemie.kurzgeschichten_kreisel.model.payload.MessageResponse;
 import de.caro_annemie.kurzgeschichten_kreisel.model.payload.SignupRequest;
-import de.caro_annemie.kurzgeschichten_kreisel.security.UserDetailsImpl;
-import de.caro_annemie.kurzgeschichten_kreisel.security.jwt.JwtUtils;
-import java.util.List;
-import java.util.stream.Collectors;
+import de.caro_annemie.kurzgeschichten_kreisel.repositories.UserRepository;
+import de.caro_annemie.kurzgeschichten_kreisel.services.AuthService;
+
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,48 +19,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/user")
 public class AuthController {
-  @Autowired
-  AuthenticationManager authenticationManager;
 
   @Autowired
   UserRepository userRepository;
 
   @Autowired
-  PasswordEncoder encoder;
-
-  @Autowired
-  JwtUtils jwtUtils;
+  AuthService authService;
 
   @PostMapping("/login")
   public ResponseEntity<?> authenticateUser(
     @Valid @RequestBody LoginRequest loginRequest
   ) {
-    Authentication authentication = authenticationManager.authenticate(
-      new UsernamePasswordAuthenticationToken(
-        loginRequest.getUsername(),
-        loginRequest.getPassword()
-      )
-    );
+    var jwtResponse = authService.authenticateUser(loginRequest);
 
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-    String jwt = jwtUtils.generateJwtToken(authentication);
-
-    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-    List<String> roles = userDetails
-      .getAuthorities()
-      .stream()
-      .map(item -> item.getAuthority())
-      .collect(Collectors.toList());
-
-    // return jwt, id, username, email as JSON 
-    return ResponseEntity.ok(
-      new JwtResponse(
-        jwt,
-        userDetails.getUsername(),
-        userDetails.getEmail(),
-        roles
-      )
-    );
+    // return jwt, id, username, email as JSON
+    return ResponseEntity.ok(jwtResponse);
   }
 
   @PostMapping("/register")
@@ -88,16 +52,7 @@ public class AuthController {
         .body(new MessageResponse("Error: Email is already in use!"));
     }
 
-    // Create new user's account
-    User user = new User(
-      signUpRequest.getUsername(),
-      signUpRequest.getRole(),
-      encoder.encode(signUpRequest.getPassword()),
-      signUpRequest.getEmail()
-      
-    );
-
-    userRepository.save(user);
+    authService.registerUser(signUpRequest);
 
     return ResponseEntity.ok(
       new MessageResponse("User registered successfully!")
