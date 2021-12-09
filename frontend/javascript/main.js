@@ -157,7 +157,7 @@ const app = Vue.createApp({
             this.read = false
             this.home = false
             this.changeInput = true,
-                this.selector = false
+            this.selector = false
         },
         Home() {
             if(this.shortstories.length == 0) {
@@ -189,12 +189,6 @@ const app = Vue.createApp({
         },
         search() {
             let config = {}
-            if (this.authorSearch != ''){
-                config = {
-                    params: {author: this.authorSearch },
-                    headers: { Authorization: 'Bearer ' + localStorage.token }
-                }
-            }
             if (this.titleSearch != ''){
                 config = {
                     params: { title: this.titleSearch},
@@ -202,27 +196,18 @@ const app = Vue.createApp({
                 }
             }
             if (this.genreSearch != ''){
-                if (this.authorSearch != '') {
-                    config = {
-                        params: { genre: this.genreSearch, author: this.authorSearch},
-                        headers: { Authorization: 'Bearer ' + localStorage.token }
-                    } 
-                }
-                if (this.titleSearch != ''){
-                    config = {
-                        params: { genre: this.genreSearch, title: this.titleSearch},
-                        headers: { Authorization: 'Bearer ' + localStorage.token }
-                    } 
-                }
-                else {
-                   config = {
+               config = {
                     params: { genre: this.genreSearch},
                     headers: { Authorization: 'Bearer ' + localStorage.token }
                 } 
-                }
-                
             }
-            if (this.authorSearch == '' && this.genreSearch == '' && this.titleSearch == ''){
+            if (this.genreSearch != '' && this.titleSearch != ''){
+                config = {
+                    params: { genre: this.genreSearch, title: this.titleSearch},
+                    headers: { Authorization: 'Bearer ' + localStorage.token }
+                }
+            }
+            if (this.genreSearch == '' && this.titleSearch == ''){
                 config = {
                     params: { limit: 10},
                     headers: { Authorization: 'Bearer ' + localStorage.token }
