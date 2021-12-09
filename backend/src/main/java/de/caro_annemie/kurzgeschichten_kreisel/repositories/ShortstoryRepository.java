@@ -16,6 +16,9 @@ public interface ShortstoryRepository extends JpaRepository<Shortstory, Long> {
     @Query(value = "SELECT * FROM Shortstory s WHERE s.title ILIKE CONCAT('%', ?1, '%') ORDER BY s.id DESC", nativeQuery = true)
     List<Shortstory> findByTitle(String title);
 
+    @Query(value = "SELECT * FROM Shortstory s WHERE s.title ILIKE CONCAT('%', ?1, '%') AND s.genre = ?2 ORDER BY s.id DESC", nativeQuery = true)
+    List<Shortstory> findByTitleInGenre(String title, String genre);
+
     @Query("SELECT s FROM Shortstory s WHERE s.genre = ?1 ORDER BY s.id DESC")
     List<Shortstory> findByGenre(String genre);
 
@@ -24,10 +27,16 @@ public interface ShortstoryRepository extends JpaRepository<Shortstory, Long> {
 
     @Query("SELECT s FROM Shortstory s ORDER BY s.id DESC")
     List<Shortstory> findAll();
+
+
+    
     
     //gets limit
     @Query(value = "SELECT * FROM Shortstory s WHERE s.title ILIKE CONCAT('%', ?1, '%') ORDER BY s.id DESC LIMIT ?2", nativeQuery = true)
     List<Shortstory> findByTitle(String title, Integer limit);
+
+    @Query(value = "SELECT * FROM Shortstory s WHERE s.title ILIKE CONCAT('%', ?1, '%') AND s.genre = ?2 ORDER BY s.id DESC LIMIT ?3", nativeQuery = true)
+    List<Shortstory> findByTitleInGenre(String title, String genre, Integer limit);
 
     @Query(value = "SELECT * FROM shortstory WHERE genre = ?1 ORDER BY id DESC LIMIT ?2", nativeQuery = true)
     List<Shortstory> findByGenre(String genre, Integer limit);

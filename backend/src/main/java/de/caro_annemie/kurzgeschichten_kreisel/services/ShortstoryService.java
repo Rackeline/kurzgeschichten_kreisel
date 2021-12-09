@@ -89,22 +89,28 @@ public class ShortstoryService {
     Integer limit
   ) {
     if (limit == null) {
+      if (genre != null) {
+        if (title != null) {
+          return repository.findByTitleInGenre(title, genre);
+        }
+        return repository.findByGenre(genre);
+      }
       if (title != null) {
         return repository.findByTitle(title);
-      }
-      if (genre != null) {
-        return repository.findByGenre(genre);
       }
       if (author != null) {
         return repository.findByAuthor(author);
       }
       return repository.findAll();
     } else {
+      if (genre != null) {
+        if (title != null) {
+          return repository.findByTitleInGenre(title, genre, limit);
+        }
+        return repository.findByGenre(genre, limit);
+      }
       if (title != null) {
         return repository.findByTitle(title, limit);
-      }
-      if (genre != null) {
-        return repository.findByGenre(genre, limit);
       }
       if (author != null) {
         return repository.findByAuthor(author, limit);
