@@ -35,6 +35,9 @@
 - Lesen GET /shortstories/?author=name
 -               returned Einträge die in der Datenbank den angegebenen Autor hinterlegt haben
 
+- Lesen GET /shortstories/?genre=genre&title=title
+-               returned Einträge die in der Datenbank den angegebenen Titel im angegebenen Genre haben
+
 - Limit Optional an allen Endpunkten möglich. Erwartet Ganzzahl (int). Beispiel /shortstories/?genre=\$genre&limit=3
 
 ## Security
