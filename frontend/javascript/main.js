@@ -75,8 +75,20 @@ const app = Vue.createApp({
             this.shortstory.creationDate = creationDate
             this.shortstory.genre = genre
             this.shortstory.text = text
-            //console.log("selectet: ", this.shortstory.id)
-            this.Read()
+            if (this.changeInput == true){
+                this.change()
+                this.ownTitles = ''
+                console.log('showdetail.change')
+            }
+            if (this.ownTitles != ''){
+                console.log('showdetail.ownTitles')
+                this.Home()
+                this.home = false    
+            }
+            if(this.home == true) {
+                console.log('showdetail.home')
+               this.Read() 
+            }
         },
         onPost() {
             if (this.shortstory.genre == '' || this.shortstory.text == '' || this.shortstory.title == '') {
@@ -147,17 +159,15 @@ const app = Vue.createApp({
                     console.log(result);
                     this.Home()
                 });
-            } else {
-                this.Read()
-            }
+            } 
 
         },
-
         change() {
             this.read = false
             this.home = false
             this.changeInput = true,
             this.selector = false
+            console.log('change')
         },
         Home() {
             if(this.shortstories.length == 0) {
@@ -166,17 +176,16 @@ const app = Vue.createApp({
             }
             this.titleSearch = ''
             this.ownTitles = false
-            this.created()
             this.read = false
             this.changeInput = false
-            
-            
+            this.created()
         },
         Read() {
             this.home = false
             this.read = true
             this.changeInput = false,
                 this.selector = false
+            console.log('read')
         },
         newStory() {
             this.shortstory.id = ''
@@ -320,7 +329,10 @@ const app = Vue.createApp({
         logout(){
             this.token = false
             this.home = false
+            this.read = false
+            this.changeInput = false
             this.role = ''
+            this.ownTitles = ''
             this.user.username = ''
             this.user.password = ''
             this.user.role = ''

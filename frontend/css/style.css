@@ -40,3 +40,7 @@ ul :hover {
 button {
     cursor: pointer;
 }
+
+.checkbox input {
+    cursor: pointer;
+}

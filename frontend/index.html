@@ -11,7 +11,7 @@
   <script src="javascript/axios.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <!-- Import CSS -->
   <link rel="stylesheet" href="css/bootstrap.min.css" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
   <link href="css/style.css" rel="stylesheet">
 </head>
 
@@ -81,9 +81,9 @@
           <div class="breadcrumb" style="float: right;">
             <h5 class="mr-2">{{ user.username }}</h5>
             <div v-if="role === 'ROLE_Author'">
-              <button class="btn btn-primary mr-2" @click="newStory()">Neu +</button>
+              <button class="btn btn-primary mr-2" @click="newStory()"><i class="bi bi-plus-square-fill"></i></button>
             </div>
-            <button class="btn btn-danger" @click="logout()">Logout</button>
+            <button class="btn btn-secondary" @click="logout()"><i class="bi bi-door-closed-fill"></i></button>
           </div>
         </div>
         <!-- end user area top-->
@@ -106,14 +106,9 @@
                 </select>
 
                 <label for="titleSearch" class="col control-label">Titel:</label>
-                <input type="text" class="col-8 form-control mb-2" v-model="titleSearch">
+                <input type="text" class="col-7 form-control mb-2" v-model="titleSearch" placeholder="Alle">
+                <button class="ml-2 col btn float-right mb-2"><i class="bi bi-search"></i></button>
               </div>
-
-            <div class="mb-4">
-              <button class="ml-2 btn btn-default float-right" @click="Home()">Clear</button>
-              <button class="btn btn-success float-right">Suchen</button>
-              
-            </div>
           </form>
           <div v-if="role === 'ROLE_Author'">
             <div>
@@ -160,10 +155,10 @@
                   <p style="color: black"> {{ shortstory.genre }}</p>
                 </div>
               </div>
-              <div v-if="shortstory.author == user.username">
+              <div v-if="shortstory.author == user.username && ownTitles != '' ">
                 <div class="col">
-                  <button class="btn btn-success mr-2" @click="change()"><i class="fa fa-edit"></i></button>
-                  <button class="btn btn-danger" @click="onDelete(shortstory.id)"><i class="fa fa-trash"></i></button>
+                  <button type="button" class="btn mr-2 changebutton" @click="change()"><i class="bi bi-pencil-fill"></i></button>
+                  <button type="button" class="btn changebutton" @click="onDelete(shortstory.id)"><i class="bi bi-trash-fill"></i></button>
                 </div>
               </div>
             </div>
@@ -230,7 +225,7 @@
             </div>
             <div class="col">
               <button class="btn btn-success">Speichern</button> <button class="btn btn-default"
-                @click="Home()">Zurück</button>
+                @click="Read()">Zurück</button>
             </div>
           </form>
         </div>
