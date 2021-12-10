@@ -81,9 +81,23 @@
           <div class="breadcrumb" style="float: right;">
             <h5 class="mr-2">{{ user.username }}</h5>
             <div v-if="role === 'ROLE_Author'">
-              <button class="btn btn-primary mr-2" @click="newStory()"><i class="bi bi-plus-square-fill"></i></button>
+              <button class="btn btn-primary mr-2" @click="newStory()" title="Neuen Titel anlegen"><i
+                  class="bi bi-plus-square-fill"></i></button>
+              <form @submit.prevent="showOwnTitles()" style="display: initial;">
+                <div v-if="read == true || changeInput == true" style="display: initial;">
+                  <button class="btn btn-info mr-2" @click="ownTitles = !ownTitles" title="Eigene Titel anzeigen"
+                    disabled><i class="bi bi-bookmark-plus-fill"></i></button>
+                </div>
+                <div v-if="read == false && changeInput == false" style="display: initial;">
+                  <button class="btn btn-info mr-2" @click="ownTitles = !ownTitles" title="Eigene Titel anzeigen"
+                    ><i class="bi bi-bookmark-plus-fill"></i></button>
+                </div>
+              </form>
             </div>
-            <button class="btn btn-secondary" @click="logout()"><i class="bi bi-door-closed-fill"></i></button>
+            <div>
+              <button class="btn btn-secondary" @click="logout()" title="Logout"><i
+                  class="bi bi-door-closed-fill"></i></button>
+            </div>
           </div>
         </div>
         <!-- end user area top-->
@@ -91,35 +105,25 @@
         <!-- start select field-->
         <div class="form-horizontal" style="clear: both;" v-if="selector == true">
           <form @submit.prevent="search()">
-           
-              <div class="row" style="margin-right: 0;">
-                <label for="genreSelect" class="col control-label">Genre:</label>
 
-                <select name="genreSelect" class="col-2 genreSelect form-control mb-2 " v-model="genreSearch">
-                  <option value="">Alle</option>
-                  <option value="Romance">Romance</option>
-                  <option value="History">History</option>
-                  <option value="Fantasy">Fantasy</option>
-                  <option value="Crime">Crime</option>
-                  <option value="Ratgeber">Ratgeber</option>
-                  <option value="Kinder">Kinder</option>
-                </select>
+            <div class="row" style="margin-right: 0;">
+              <label for="genreSelect" class="col control-label">Genre:</label>
 
-                <label for="titleSearch" class="col control-label">Titel:</label>
-                <input type="text" class="col-7 form-control mb-2" v-model="titleSearch" placeholder="Alle">
-                <button class="ml-2 col btn float-right mb-2"><i class="bi bi-search"></i></button>
-              </div>
-          </form>
-          <div v-if="role === 'ROLE_Author'">
-            <div>
-              <div class="checkbox">
-                <label for="ownTitles">
-                  <input type="checkbox" value="ownTitles" v-model="ownTitles" @change="showOwnTitles()">
-                  Eigene Titel anzeigen
-                </label>
-              </div>
+              <select name="genreSelect" class="col-2 genreSelect form-control mb-2 " v-model="genreSearch">
+                <option value="">Alle</option>
+                <option value="Romance">Romance</option>
+                <option value="History">History</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Crime">Crime</option>
+                <option value="Ratgeber">Ratgeber</option>
+                <option value="Kinder">Kinder</option>
+              </select>
+
+              <label for="titleSearch" class="col control-label">Titel:</label>
+              <input type="text" class="col-7 form-control mb-2" v-model="titleSearch" placeholder="Alle">
+              <button class="ml-2 col btn float-right mb-2" title="Suchen"><i class="bi bi-search"></i></button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
       <!-- end select field-->
@@ -157,8 +161,10 @@
               </div>
               <div v-if="shortstory.author == user.username && ownTitles != '' ">
                 <div class="col">
-                  <button type="button" class="btn mr-2 changebutton" @click="change()"><i class="bi bi-pencil-fill"></i></button>
-                  <button type="button" class="btn changebutton" @click="onDelete(shortstory.id)"><i class="bi bi-trash-fill"></i></button>
+                  <button type="button" class="btn mr-2 changebutton" @click="change()" title="Titel ändern"><i
+                      class="bi bi-pencil-fill"></i></button>
+                  <button type="button" class="btn changebutton" @click="onDelete(shortstory.id)"
+                    title="Titel löschen"><i class="bi bi-trash-fill"></i></button>
                 </div>
               </div>
             </div>
@@ -176,7 +182,8 @@
             <p>Genre: {{ shortstory.genre }}</p>
           </div>
           <div class="col-2">
-            <button class="btn btn-default" style="float: right;" @click="Home()">Zurück</button>
+            <button class="btn btn-default" style="float: right;" @click="Home()" title="Home"><i
+                class="bi bi-house-door-fill"></i></button>
           </div>
         </div>
         <div class="row">
@@ -186,8 +193,11 @@
         </div>
         <!-- start change mode -->
         <div v-if="role === 'ROLE_Author' && logindata.username == shortstory.author">
-          <button class="btn btn-success mr-2" @click="change()">Ändern</button>
-          <button class="btn btn-danger" @click="onDelete(shortstory.id)">Löschen</button>
+          <button type="button" class="btn btn-success mr-2 " @click="change()" title="Titel ändern"><i
+              class="bi bi-pencil-fill"></i></button>
+          <button type="button" class="btn btn-warning" @click="onDelete(shortstory.id)" title="Titel löschen"><i
+              class="bi bi-trash-fill"></i></button>
+
         </div>
         <!-- end change mode -->
       </div>
@@ -224,8 +234,9 @@
               </div>
             </div>
             <div class="col">
-              <button class="btn btn-success">Speichern</button> <button class="btn btn-default"
-                @click="Read()">Zurück</button>
+              <button class="btn btn-success mr-2" title="Speichern"><i class="bi bi-save-fill"></i></button>
+              <button class="btn btn-default" @click="Home()" title="Zurück"><i
+                  class="bi bi-house-door-fill"></i></button>
             </div>
           </form>
         </div>

@@ -8,7 +8,7 @@ const app = Vue.createApp({
             selector: false,
             read: false,
             changeInput: false,
-            ownTitles: '',
+            ownTitles: false,
             genreSearch: '',
             titleSearch: '',
             status: '',
