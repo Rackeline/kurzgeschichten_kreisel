@@ -31,13 +31,10 @@ public class ShortstoryService {
     var userDetails = (SecurityUserDetails) securityContext
       .getAuthentication()
       .getPrincipal();
-
     // Set creation date to now
     shortstory.setCreationDate(new Date());
-
     // Set shortstorys author based on currently logged in user
     shortstory.setAuthor(userDetails.getUsername());
-
     // Persist it and return the shortstory
     return repository.save(shortstory);
   }

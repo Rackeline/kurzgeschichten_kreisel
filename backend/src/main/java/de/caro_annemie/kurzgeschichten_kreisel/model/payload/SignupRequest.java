@@ -1,5 +1,8 @@
 package de.caro_annemie.kurzgeschichten_kreisel.model.payload;
 
+/**
+ * a signup request for registering a new user
+ */
 public class SignupRequest {
     private String username, email, password, role;
 

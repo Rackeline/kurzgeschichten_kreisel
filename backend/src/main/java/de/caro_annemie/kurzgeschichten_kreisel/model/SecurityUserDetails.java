@@ -10,6 +10,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/**
+ * user representation for spring security
+ */
 public class SecurityUserDetails implements UserDetails {
   private static final long serialVersionUID = 1L;
 
@@ -24,10 +27,16 @@ public class SecurityUserDetails implements UserDetails {
   @JsonIgnore
   private String password;
 
-  // Collection mit vielen Objekten die alle von Granted Authority (Spring boot Security) erben
   private Collection<? extends GrantedAuthority> authorities;
 
-  //constructor
+  /**
+   * constructor
+   * @param id
+   * @param username
+   * @param email
+   * @param password
+   * @param authorities roles of user (more than one is possible: list)
+   */
   public SecurityUserDetails(
     Long id,
     String username,
@@ -42,12 +51,13 @@ public class SecurityUserDetails implements UserDetails {
     this.authorities = authorities;
   }
 
-  //macht aus User ein UserDetails
+  /**
+   * creates securityUserDetails object from user
+   * @param user user to convert
+   * @return securityUserDetails created from user
+   */
   public static SecurityUserDetails build(User user) {
-	  // legt ListObjekt zur Speicherung der Rollen an
     List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-
-	  //fügt Rolle des User Objekts zu Liste hinzu
     authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
 
     return new SecurityUserDetails(
@@ -59,7 +69,7 @@ public class SecurityUserDetails implements UserDetails {
     );
   }
 
-  // getter
+  //getter
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return authorities;
@@ -83,7 +93,7 @@ public class SecurityUserDetails implements UserDetails {
     return username;
   }
 
-  // Prüfmethoden, von Interface vorgegeben --> unbenutzt deswegen immer true
+  // methods defined by interface
   @Override
   public boolean isAccountNonExpired() {
     return true;

@@ -8,15 +8,11 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 
+/**
+ * User entity
+ */
 @Entity
-@Table(
-  name = "`user`",
-  uniqueConstraints = {
-    @UniqueConstraint(columnNames = "username"),
-    @UniqueConstraint(columnNames = "email"),
-  }
-)
-
+@Table(name = "`user`", uniqueConstraints = {@UniqueConstraint(columnNames = "username"), @UniqueConstraint(columnNames = "email")})
 public class User {
   @Id
   @GeneratedValue
@@ -38,7 +34,7 @@ public class User {
   @Column(length = 50)
   private String email;
 
-  //constructor
+  //constructors
   public User(String username, String role, String password, String email) {
     this.username = username;
     this.role = role;

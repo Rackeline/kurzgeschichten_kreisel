@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * provides endpoints to the frontend for registering and login
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/user")
@@ -26,20 +29,24 @@ public class AuthController {
   @Autowired
   AuthService authService;
 
+  /**
+   * user login based on given request body
+   * @param loginRequest login parameters from request body
+   * @return returns jwt, id, username and email as JSON
+   */
   @PostMapping("/login")
-  public ResponseEntity<?> authenticateUser(
-    @Valid @RequestBody LoginRequest loginRequest
-  ) {
+  public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
     var jwtResponse = authService.authenticateUser(loginRequest);
-
-    // return jwt, id, username, email as JSON
     return ResponseEntity.ok(jwtResponse);
   }
 
+  /**
+   * stores new user in database using the signup informations from request body
+   * @param signUpRequest registration parameters from request body
+   * @return response message as JSON
+   */
   @PostMapping("/register")
-  public ResponseEntity<?> registerUser(
-    @Valid @RequestBody SignupRequest signUpRequest
-  ) {
+  public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
       return ResponseEntity
         .badRequest()

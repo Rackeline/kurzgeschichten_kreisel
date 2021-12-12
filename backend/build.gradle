@@ -27,3 +27,8 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+javadoc {
+    source = sourceSets.main.allJava
+    classpath = sourceSets.main.runtimeClasspath
+}

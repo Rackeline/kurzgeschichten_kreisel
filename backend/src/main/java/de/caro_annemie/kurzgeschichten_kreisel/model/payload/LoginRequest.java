@@ -1,5 +1,8 @@
 package de.caro_annemie.kurzgeschichten_kreisel.model.payload;
 
+/**
+ * a client login request
+ */
 public class LoginRequest {
     private String username, password;
 

@@ -54,6 +54,11 @@ public class AuthService implements UserDetailsService {
     return SecurityUserDetails.build(user);
   }
 
+  /**
+   * authenticates user by given login request
+   * @param loginRequest login request
+   * @return jwt, id, username and email as JwtResponse
+   */
   public JwtResponse authenticateUser(LoginRequest loginRequest) {
     Authentication authentication = authenticationManager.authenticate(
       new UsernamePasswordAuthenticationToken(
@@ -81,9 +86,14 @@ public class AuthService implements UserDetailsService {
     );
   }
 
+  /**
+   * stores new user in database using the given signup informations
+   * @param signUpRequest registration parameters as SignUpRequest
+   * @return created user as User
+   */
   public User registerUser(SignupRequest signUpRequest) {
 
-    // Create new user's account
+    // Create new user object
     User user = new User(
       signUpRequest.getUsername(),
       signUpRequest.getRole(),
@@ -91,6 +101,7 @@ public class AuthService implements UserDetailsService {
       signUpRequest.getEmail()
     );
 
+    // save user in database and return user
     return userRepository.save(user);
   }
 }

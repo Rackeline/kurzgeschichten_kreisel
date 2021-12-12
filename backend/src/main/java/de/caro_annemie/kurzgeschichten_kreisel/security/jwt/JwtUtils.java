@@ -23,7 +23,11 @@ public class JwtUtils {
   @Value("${kurzgeschichten_kreisel.app.jwtExpirationMs}")
   private int jwtExpirationMs;
 
-  //make JsonWebToken from authentication object
+  /**
+   * make JsonWebToken from authentication object
+   * @param authentication
+   * @return JWT as String
+   */
   public String generateJwtToken(Authentication authentication) {
     SecurityUserDetails userPrincipal = (SecurityUserDetails) authentication.getPrincipal();
 
@@ -36,7 +40,11 @@ public class JwtUtils {
       .compact();
   }
 
-  //extract username from JsonWebTokenken
+  /**
+   * extract username from JsonWebTokenken
+   * @param token JWT as String
+   * @return username
+   */
   public String getUserNameFromJwtToken(String token) {
     return Jwts
       .parser()
@@ -46,7 +54,11 @@ public class JwtUtils {
       .getSubject();
   }
 
-  //validate JsonWebToken
+  /**
+   * validate JsonWebToken
+   * @param authToken JWT to validate
+   * @return boolean
+   */
   public boolean validateJwtToken(String authToken) {
     try {
       Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);

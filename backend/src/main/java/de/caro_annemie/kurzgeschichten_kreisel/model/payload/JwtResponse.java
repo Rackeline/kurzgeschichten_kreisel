@@ -2,6 +2,9 @@ package de.caro_annemie.kurzgeschichten_kreisel.model.payload;
 
 import java.util.List;
 
+/**
+ * response for succesful authentification
+ */
 public class JwtResponse {
 
   public JwtResponse(

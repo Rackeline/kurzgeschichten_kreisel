@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/**
+ * model for shortstory entity
+ */
 @Entity
 public class Shortstory {
     @Id 
@@ -34,7 +37,7 @@ public class Shortstory {
     @Column(length = 20000)
     private String text;
 
-    //constructor
+    //constructors
     public Shortstory(String title, String author, Date creationDate, String text, String genre) {
         this.title = title;
         this.author = author;
@@ -44,7 +47,6 @@ public class Shortstory {
     }
 
     public Shortstory() {
-
     }
 
     //getter and setter
@@ -91,9 +93,4 @@ public class Shortstory {
     public void setText(String text) {
         this.text = text;
     }
-
-
-
-    
-    
 }

@@ -1,5 +1,8 @@
 package de.caro_annemie.kurzgeschichten_kreisel.model.payload;
 
+/**
+ * a customizable response message
+ */
 public class MessageResponse {
     private String message;
 
