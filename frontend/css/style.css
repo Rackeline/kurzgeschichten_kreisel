@@ -40,6 +40,10 @@ ul :hover {
 button {
     cursor: pointer;
 }
+.btnShow:focus {
+    outline: none !important;
+    box-shadow:none
+  }
 
 .checkbox input {
     cursor: pointer;

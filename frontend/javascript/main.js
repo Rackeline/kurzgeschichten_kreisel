@@ -77,17 +77,17 @@ const app = Vue.createApp({
             this.shortstory.text = text
             if (this.changeInput == true){
                 this.change()
-                this.ownTitles = ''
+                this.ownTitles = false
                 console.log('showdetail.change')
-            }
-            if (this.ownTitles != ''){
-                console.log('showdetail.ownTitles')
-                this.Home()
-                this.home = false    
             }
             if(this.home == true) {
                 console.log('showdetail.home')
                this.Read() 
+            }
+            if(this.ownTitles == true) {
+                console.log('showdetail.ownTitles')
+                this.ownTitles = false
+                this.Read() 
             }
         },
         onPost() {
@@ -159,12 +159,17 @@ const app = Vue.createApp({
                     console.log(result);
                     this.Home()
                 });
-            } 
+            } else {
+                if (this.ownTitles == true) {
+                    this.Home()
+                }
+            }
 
         },
         change() {
             this.read = false
             this.home = false
+            this.ownTitles = false
             this.changeInput = true,
             this.selector = false
             console.log('change')
@@ -242,7 +247,7 @@ const app = Vue.createApp({
 
         },
         showOwnTitles(){
-            if(this.ownTitles == true){
+            if (this.ownTitles == false) {
                 let config = {
                     params: { author: this.logindata.username },
                     headers: { Authorization: 'Bearer ' + localStorage.token }
@@ -253,13 +258,18 @@ const app = Vue.createApp({
                         console.log(response.data)
                         //console.log(localStorage.token)
                         this.shortstories = response.data
+                        this.ownTitles = true
+                        this.home = false
                     })
                     .catch((error) => {
                         console.log(error)
                     })
-            } else {
+            }
+            if (this.ownTitles == true) {
                 this.Home()
             }
+                
+            
         },
         login() {
             if (this.regist == true) {

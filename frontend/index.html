@@ -83,16 +83,21 @@
             <div v-if="role === 'ROLE_Author'">
               <button class="btn btn-primary mr-2" @click="newStory()" title="Neuen Titel anlegen"><i
                   class="bi bi-plus-square-fill"></i></button>
-              <form @submit.prevent="showOwnTitles()" style="display: initial;">
-                <div v-if="read == true || changeInput == true" style="display: initial;">
-                  <button class="btn btn-info mr-2" @click="ownTitles = !ownTitles" title="Eigene Titel anzeigen"
+
+                  <div v-if="read == true || changeInput == true" style="display: initial;">
+                  <button class="btn btn-info mr-2 btnShow" @click="showOwnTitles()" title="Eigene Titel anzeigen"
                     disabled><i class="bi bi-bookmark-plus-fill"></i></button>
                 </div>
                 <div v-if="read == false && changeInput == false" style="display: initial;">
-                  <button class="btn btn-info mr-2" @click="ownTitles = !ownTitles" title="Eigene Titel anzeigen"
+                  <button class="btn btn-info mr-2 btnShow" @click="showOwnTitles()" title="Eigene Titel anzeigen"
                     ><i class="bi bi-bookmark-plus-fill"></i></button>
                 </div>
-              </form>
+                 
+               <!--   
+              <form @submit.prevent="showOwnTitles()" style="display: initial;">
+                 
+             
+              </form> -->
             </div>
             <div>
               <button class="btn btn-secondary" @click="logout()" title="Logout"><i
@@ -129,7 +134,7 @@
       <!-- end select field-->
 
       <!-- start List shortstories -->
-      <div v-if="home == true">
+      <div v-if="home == true || ownTitles == true">
         <ul class="list-group" style="clear: both;">
           <li class="list-group-item" v-for="(shortstory, index ) in shortstories"
             @click="showdetail(shortstory.id, shortstory.title, shortstory.author, shortstory.creationDate, shortstory.genre, shortstory.text)"
@@ -159,7 +164,7 @@
                   <p style="color: black"> {{ shortstory.genre }}</p>
                 </div>
               </div>
-              <div v-if="shortstory.author == user.username && ownTitles != '' ">
+              <div v-if="this.ownTitles == true">
                 <div class="col">
                   <button type="button" class="btn mr-2 changebutton" @click="change()" title="Titel ändern"><i
                       class="bi bi-pencil-fill"></i></button>
@@ -243,7 +248,6 @@
       </div>
       <!-- end input mode -->
     </div>
-  </div>
   </div>
   <!-- Import App -->
   <script src="javascript/main.js"></script>
