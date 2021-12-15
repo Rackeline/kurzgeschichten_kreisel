@@ -48,3 +48,6 @@ button {
 .checkbox input {
     cursor: pointer;
 }
+.icon:hover {
+    background-color: #e2e6ea;
+}
