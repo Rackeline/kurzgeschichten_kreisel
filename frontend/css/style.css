@@ -34,20 +34,23 @@ li p {
 }
 
 ul :hover {
-    background-color: rgb(206, 255, 240);
+    background-color: #e9f8fa;
+    cursor: pointer;
+}
+.shortstoriesAuthor :hover {
+    background-color: rgb(245, 244, 244);
+    cursor: text;
 }
 
 button {
+    cursor: pointer;
+}
+
+.icon:hover {
+    background-color: transparent;
     cursor: pointer;
 }
 .btnShow:focus {
     outline: none !important;
     box-shadow:none
   }
-
-.checkbox input {
-    cursor: pointer;
-}
-.icon:hover {
-    background-color: #e2e6ea;
-}

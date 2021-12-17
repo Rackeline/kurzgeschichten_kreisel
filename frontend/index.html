@@ -20,7 +20,7 @@
     <!-- start title-->
     <div class="jumbotron text-center">
       <h1>Kurzgeschichtenkreisel</h1>
-      <h2>Finde spannende Geschichten oder werde selbst Autor</h2>
+      <h2>Erlebe spannende Geschichten oder werde selbst Autor</h2>
     </div>
     <!-- end title-->
 
@@ -83,15 +83,11 @@
             <div v-if="role === 'ROLE_Author'">
               <button class="btn btn-primary mr-2" @click="newStory()" title="Neuen Titel anlegen"><i
                   class="bi bi-plus-square-fill"></i></button>
-
-                  <div v-if="read == true || changeInput == true" style="display: initial;">
-                  <button class="btn btn-info mr-2 btnShow" @click="showOwnTitles()" title="Eigene Titel anzeigen"
-                    disabled><i class="bi bi-bookmark-plus-fill"></i></button>
-                </div>
-                <div v-if="read == false && changeInput == false" style="display: initial;">
-                  <button class="btn btn-info mr-2 btnShow" @click="showOwnTitles()" title="Eigene Titel anzeigen"
-                    ><i class="bi bi-bookmark-plus-fill"></i></button>
-                </div>
+              
+              <div  style="display: initial;">
+                <button class="btn btn-info mr-2 btnShow" @click="OwnTitles()" title="Eigene Titel anzeigen"><i
+                    class="bi bi-bookmark-plus-fill"></i></button>
+              </div>
             </div>
             <div>
               <button class="btn btn-secondary" @click="logout()" title="Logout"><i
@@ -103,7 +99,8 @@
 
         <!-- start select field-->
         <div class="form-horizontal" style="clear: both;" v-if="selector == true">
-          <form @submit.prevent="search()">
+          <h3 class="mt-4">Finde Geschichten zum schmökern und träumen:</h3>
+          <form @submit.prevent="search()" >
 
             <div class="row" style="margin-right: 0;">
               <label for="genreSelect" class="col control-label">Genre:</label>
@@ -128,15 +125,15 @@
       <!-- end select field-->
 
       <!-- start List shortstories -->
-      <div v-if="home == true || ownTitles == true">
+      <div v-if="home == true">
         <ul class="list-group" style="clear: both;">
           <li class="list-group-item" v-for="(shortstory, index ) in shortstories"
-            @click="showdetail(shortstory.id, shortstory.title, shortstory.author, shortstory.creationDate, shortstory.genre, shortstory.text)"
+            @click="showdetail(shortstory.id, shortstory.title, shortstory.author, shortstory.creationDate, shortstory.genre, shortstory.text, false)"
             :key="shortstory.id">
             <div class="row ">
               <div class="col-5">
                 <div v-if="shortstory.author == user.username">
-                  <h4 style="color: blue">{{ shortstory.title }}</h4>
+                  <h4 style="color: #17a2b8">{{ shortstory.title }}</h4>
                 </div>
                 <div v-else>
                   <h4 style="color: black">{{ shortstory.title }}</h4>
@@ -144,7 +141,7 @@
               </div>
               <div class="col-3">
                 <div v-if="shortstory.author == user.username">
-                  <p style="color: blue"> <strong>{{ shortstory.author }} </strong></p>
+                  <p style="color: #17a2b8"> <strong>{{ shortstory.author }} </strong></p>
                 </div>
                 <div v-else>
                   <p style="color: black;"> <strong>{{ shortstory.author }} </strong></p>
@@ -152,18 +149,10 @@
               </div>
               <div class="col">
                 <div v-if="shortstory.author == user.username">
-                  <p style="color: blue"> {{ shortstory.genre }}</p>
+                  <p style="color: #17a2b8"> {{ shortstory.genre }}</p>
                 </div>
                 <div v-else>
                   <p style="color: black"> {{ shortstory.genre }}</p>
-                </div>
-              </div>
-              <div v-if="this.ownTitles == true">
-                <div class="col">
-                  <button type="button" class="btn btn-light mr-2" @click="change()" title="Titel ändern"><i
-                      class="bi bi-pencil-fill icon"></i></button>
-                  <button type="button" class="btn btn-light" @click="onDelete(shortstory.id)"
-                    title="Titel löschen"><i class="bi bi-trash-fill icon"></i></button>
                 </div>
               </div>
             </div>
@@ -171,6 +160,44 @@
         </ul>
       </div>
       <!-- end List shortstories -->
+
+      <!-- start List shortstoriesAuthor -->
+      <div v-if="ownTitles == true">
+        <div class="row" style="clear: both;">
+          <div class="col-10">
+            <h3 style="color: #17a2b8;">Hallo {{ user.username }}, hier kannst du deine Titel bearbeiten</h3>
+          </div>
+          <div class="col-2">
+            <button class="btn btn-default" style="float: right;" @click="Home()" title="Home"><i
+          class="bi bi-house-door-fill"></i></button>
+          </div>
+        </div>
+  
+        <ul class="list-group shortstoriesAuthor" style="clear: both;">
+          <li class="list-group-item" v-for="(shortstory, index ) in shortstories"
+            @click="showdetail(shortstory.id, shortstory.title, shortstory.author, shortstory.creationDate, shortstory.genre, shortstory.text, true)"
+            :key="shortstory.id">
+            <div class="row ">
+              <div class="col-5">
+                <h4 style="color: gray">{{ shortstory.title }}</h4>
+              </div>
+              <div class="col-3">
+                <p style="color: gray;"><strong>{{ shortstory.creationDate.substr(8, 2) }}.{{ shortstory.creationDate.substr(5, 2) }}.{{ shortstory.creationDate.substr(0, 4) }} </strong></p>
+              </div>
+              <div class="col">
+                <p style="color: gray">{{ shortstory.genre }}</p>
+              </div>
+              <div class="col" v-if="shortstory.author == user.username">
+                <button type="button" class="btn btn-success mr-2" @click="change()" title="Titel ändern"><i
+                    class="bi bi-pencil-fill icon"></i></button>
+                <button type="button" class="btn btn-warning" @click="onDelete(shortstory.id, true)" title="Titel löschen"><i
+                    class="bi bi-trash-fill icon"></i></button>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <!-- end List shortstoriesAuthor -->
 
       <!-- start read mode -->
       <div v-if="read == true">
@@ -194,7 +221,7 @@
         <div v-if="role === 'ROLE_Author' && logindata.username == shortstory.author">
           <button type="button" class="btn btn-success mr-2 " @click="change()" title="Titel ändern"><i
               class="bi bi-pencil-fill"></i></button>
-          <button type="button" class="btn btn-warning" @click="onDelete(shortstory.id)" title="Titel löschen"><i
+          <button type="button" class="btn btn-warning" @click="onDelete(shortstory.id, false)" title="Titel löschen"><i
               class="bi bi-trash-fill"></i></button>
         </div>
         <!-- end change mode -->
@@ -231,10 +258,16 @@
                   v-model="shortstory.text" class="form-control" rows="3"></textarea>
               </div>
             </div>
-            <div class="col">
+            <div class="col" style="display: flex;" >
               <button class="btn btn-success mr-2" title="Speichern"><i class="bi bi-save-fill"></i></button>
-              <button class="btn btn-default" @click="Home()" title="Zurück"><i
-                  class="bi bi-house-door-fill"></i></button>
+              <div v-if="this.authorList == true">
+                <button class="btn btn-default"  @click="OwnTitles()" title="Zurück"><i class="bi bi-arrow-left-square-fill"></i></button>
+              </div>
+              <div v-if="this.authorList == false">
+                <button class="btn btn-default"  @click="Home()" title="Zurück"><i
+                    class="bi bi-house-door-fill"></i></button>
+              </div>
+
             </div>
           </form>
         </div>

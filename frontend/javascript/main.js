@@ -2,6 +2,7 @@ const app = Vue.createApp({
     data() {
         return {
             shortstories: [],
+            shortstoriesAuthor: [],
             token: false,
             regist: false,
             home: false,
@@ -9,6 +10,7 @@ const app = Vue.createApp({
             read: false,
             changeInput: false,
             ownTitles: false,
+            authorList: false,
             genreSearch: '',
             titleSearch: '',
             status: '',
@@ -68,13 +70,15 @@ const app = Vue.createApp({
                     console.log(error)
                 })
         },
-        showdetail(id, title, author, creationDate, genre, text) {
+        showdetail(id, title, author, creationDate, genre, text, authorList) {
             this.shortstory.id = id
             this.shortstory.title = title
             this.shortstory.author = author
             this.shortstory.creationDate = creationDate
             this.shortstory.genre = genre
             this.shortstory.text = text
+            this.authorList = authorList
+            console.log('this.authorList', this.authorList)
             if (this.changeInput == true){
                 this.change()
                 this.ownTitles = false
@@ -87,7 +91,11 @@ const app = Vue.createApp({
             if(this.ownTitles == true) {
                 console.log('showdetail.ownTitles')
                 this.ownTitles = false
-                this.Read() 
+                if(this.authorList == true) {
+                    console.log('showdetail.authorList')
+                    this.authorList = false
+                    this.OwnTitles() 
+                } 
             }
         },
         onPost() {
@@ -148,7 +156,8 @@ const app = Vue.createApp({
             }
 
         },
-        onDelete(id) {
+        onDelete(id, authorList) {
+            this.authorList = authorList
             if (confirm('Möchten Sie den Eintrag endgültig löschen?')) {
                 let config = {
                     headers: {
@@ -157,13 +166,15 @@ const app = Vue.createApp({
                 }
                 axios.delete("http://localhost:8080/shortstories/" + id, config).then((result) => {
                     console.log(result);
-                    this.Home()
+                    if (this.authorList == false){
+                       this.Home() 
+                    }
+                    if(this.authorList == true) {
+                        this.authorList = false
+                        this.OwnTitles()
+                    }
                 });
-            } else {
-                if (this.ownTitles == true) {
-                    this.Home()
-                }
-            }
+            } 
 
         },
         change() {
@@ -184,6 +195,22 @@ const app = Vue.createApp({
             this.read = false
             this.changeInput = false
             this.created()
+        },
+        OwnTitles() {
+            this.home = false
+            this.read = false
+            this.changeInput = false
+            this.selector = false
+            this.ownTitles = !this.ownTitles
+            if (this.authorList == true) {
+                this.authorList = false
+            }
+            if (this.ownTitles == true) {
+                this.showOwnTitles()
+            }
+            if (this.ownTitles == false) {
+                this.Home()
+            }
         },
         Read() {
             this.home = false
@@ -247,7 +274,7 @@ const app = Vue.createApp({
 
         },
         showOwnTitles(){
-            if (this.ownTitles == false) {
+            if (this.ownTitles == true) {
                 let config = {
                     params: { author: this.logindata.username },
                     headers: { Authorization: 'Bearer ' + localStorage.token }
@@ -265,11 +292,7 @@ const app = Vue.createApp({
                         console.log(error)
                     })
             }
-            if (this.ownTitles == true) {
-                this.Home()
-            }
-                
-            
+         
         },
         login() {
             if (this.regist == true) {
