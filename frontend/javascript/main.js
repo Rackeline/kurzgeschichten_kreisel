@@ -14,6 +14,7 @@ const app = Vue.createApp({
             genreSearch: '',
             titleSearch: '',
             status: '',
+            noEntryfound: false,
             shortstory: {
                 id: '',
                 author: '',
@@ -229,6 +230,7 @@ const app = Vue.createApp({
             this.change()
         },
         search() {
+            this.noEntryfound = false
             let config = {}
             if (this.titleSearch != ''){
                 config = {
@@ -259,13 +261,9 @@ const app = Vue.createApp({
                 .get('http://localhost:8080/shortstories/', config)
                 .then((response) => {
                     console.log(response.data)
-                    this.titleSearch = ''
-                    this.genreSearch = ''
-                    this.authorSearch = ''
                     this.shortstories = response.data
                     if (response.data.length == 0) {
-                        alert('Eintrag nicht gefunden.')
-                        this.Home()
+                        this.noEntryfound = true  
                     }
                 })
                 .catch((error) => {
@@ -320,6 +318,7 @@ const app = Vue.createApp({
                     })
                     .catch(error => {
                         console.log(error.response)
+                        this.statuscode = error.response.status
                         if(error.response.status == 400){
                             alert('Name/ Email existiert schon!')
                         }
@@ -351,6 +350,7 @@ const app = Vue.createApp({
                     })
                     .catch(error => {
                         console.log(error.response)
+                        this.statuscode = error.response.status
                         if(error.response.status == 401){
                             alert('Benutzer oder Passwort unbekannt')
                         }

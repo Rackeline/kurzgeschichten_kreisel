@@ -19,8 +19,8 @@
   <div id="app">
     <!-- start title-->
     <div class="jumbotron text-center">
-      <h1>Kurzgeschichtenkreisel</h1>
-      <h2>Erlebe spannende Geschichten oder werde selbst Autor</h2>
+      <h1 class="display-4">Kurzgeschichtenkreisel</h1>
+      <p class="lead">Erlebe spannende Geschichten oder werde selbst Autor</p>
     </div>
     <!-- end title-->
 
@@ -78,20 +78,22 @@
       <!-- start user area top-->
       <div v-if="token == true">
         <div>
-          <div class="breadcrumb" style="float: right;">
-            <h5 class="mr-2">{{ user.username }}</h5>
-            <div v-if="role === 'ROLE_Author'">
-              <button class="btn btn-primary mr-2" @click="newStory()" title="Neuen Titel anlegen"><i
-                  class="bi bi-plus-square-fill"></i></button>
-              
-              <div  style="display: initial;">
-                <button class="btn btn-info mr-2 btnShow" @click="OwnTitles()" title="Eigene Titel anzeigen"><i
-                    class="bi bi-bookmark-plus-fill"></i></button>
+          <div class="breadcrumb">
+            <div class="col">
+              <button class="btn btn-dark mr-2 btnShow" style="float: left;" @click="Home()" title="Home"><i
+                  class="bi bi-house-door-fill"></i></button>
+              <div v-if="role === 'ROLE_Author'">
+                <button class="btn btn-primary mr-2" style="float: left;" @click="newStory()"
+                  title="Neuen Titel anlegen"><i class="bi bi-plus-square"></i> Neu</button>
+                <button class="btn btn-info btnShow" style="float: left;" @click="OwnTitles()"
+                  title="Eigene Titel anzeigen">Meine Titel</button>
               </div>
             </div>
-            <div>
-              <button class="btn btn-secondary" @click="logout()" title="Logout"><i
+
+            <div class="col-5">
+              <button class="btn btn-secondary" style="float: right;" @click="logout()" title="Logout"><i
                   class="bi bi-door-closed-fill"></i></button>
+              <h5 class="mr-2" style="float: right;">{{ user.username }}</h5>
             </div>
           </div>
         </div>
@@ -100,9 +102,9 @@
         <!-- start select field-->
         <div class="form-horizontal" style="clear: both;" v-if="selector == true">
           <h3 class="mt-4">Finde Geschichten zum schmökern und träumen:</h3>
-          <form @submit.prevent="search()" >
+          <form @submit.prevent="search()">
 
-            <div class="row" style="margin-right: 0;">
+            <div class="row mt-4" style="margin-right: 0;">
               <label for="genreSelect" class="col control-label">Genre:</label>
 
               <select name="genreSelect" class="col-2 genreSelect form-control mb-2 " v-model="genreSearch">
@@ -126,7 +128,7 @@
 
       <!-- start List shortstories -->
       <div v-if="home == true">
-        <ul class="list-group" style="clear: both;">
+        <ul class="list-group mt-4" style="clear: both;">
           <li class="list-group-item" v-for="(shortstory, index ) in shortstories"
             @click="showdetail(shortstory.id, shortstory.title, shortstory.author, shortstory.creationDate, shortstory.genre, shortstory.text, false)"
             :key="shortstory.id">
@@ -158,22 +160,22 @@
             </div>
           </li>
         </ul>
+        <div class="mt-4" v-if="this.noEntryfound == true">
+          <p style="background-color: rgb(255, 91, 91); text-align: center;">Zu Ihrer Suche wurde kein passender Titel gefunden.</p>
+        </div>
       </div>
       <!-- end List shortstories -->
 
       <!-- start List shortstoriesAuthor -->
       <div v-if="ownTitles == true">
-        <div class="row" style="clear: both;">
+        <div class="row mt-4" style="clear: both;">
           <div class="col-10">
-            <h3 style="color: #17a2b8;">Hallo {{ user.username }}, hier kannst du deine Titel bearbeiten</h3>
+            <h3>Hallo {{ user.username }}, hier kannst du deine Titel bearbeiten</h3>
           </div>
-          <div class="col-2">
-            <button class="btn btn-default" style="float: right;" @click="Home()" title="Home"><i
-          class="bi bi-house-door-fill"></i></button>
-          </div>
+          
         </div>
-  
-        <ul class="list-group shortstoriesAuthor" style="clear: both;">
+
+        <ul class="list-group shortstoriesAuthor mt-4" style="clear: both;">
           <li class="list-group-item" v-for="(shortstory, index ) in shortstories"
             @click="showdetail(shortstory.id, shortstory.title, shortstory.author, shortstory.creationDate, shortstory.genre, shortstory.text, true)"
             :key="shortstory.id">
@@ -182,7 +184,8 @@
                 <h4 style="color: gray">{{ shortstory.title }}</h4>
               </div>
               <div class="col-3">
-                <p style="color: gray;"><strong>{{ shortstory.creationDate.substr(8, 2) }}.{{ shortstory.creationDate.substr(5, 2) }}.{{ shortstory.creationDate.substr(0, 4) }} </strong></p>
+                <p style="color: gray;"><strong>{{ shortstory.creationDate.substr(8, 2) }}.{{
+                    shortstory.creationDate.substr(5, 2) }}.{{ shortstory.creationDate.substr(0, 4) }} </strong></p>
               </div>
               <div class="col">
                 <p style="color: gray">{{ shortstory.genre }}</p>
@@ -190,8 +193,8 @@
               <div class="col" v-if="shortstory.author == user.username">
                 <button type="button" class="btn btn-success mr-2" @click="change()" title="Titel ändern"><i
                     class="bi bi-pencil-fill icon"></i></button>
-                <button type="button" class="btn btn-warning" @click="onDelete(shortstory.id, true)" title="Titel löschen"><i
-                    class="bi bi-trash-fill icon"></i></button>
+                <button type="button" class="btn btn-warning btnShow" @click="onDelete(shortstory.id, true)"
+                  title="Titel löschen"><i class="bi bi-trash-fill icon"></i></button>
               </div>
             </div>
           </li>
@@ -207,10 +210,7 @@
             <p><em>{{ shortstory.author}}</em></p>
             <p>Genre: {{ shortstory.genre }}</p>
           </div>
-          <div class="col-2">
-            <button class="btn btn-default" style="float: right;" @click="Home()" title="Home"><i
-                class="bi bi-house-door-fill"></i></button>
-          </div>
+
         </div>
         <div class="row">
           <blockquote class="col-12 blockquote mt-4">
@@ -230,47 +230,41 @@
 
       <!-- start input mode -->
       <div v-if="changeInput == true">
-        <div>
-          <form class="form-horizontal" @submit.prevent="onChange()">
-            <div class="form-group">
-              <label for="title" class="col control-label">Titel:</label>
-              <div class="col">
-                <input v-model="shortstory.title" class="form-control" placeholder="Titel"></input>
-              </div>
+        <form class="form-horizontal" @submit.prevent="onChange()">
+          <div class="form-group">
+            <label for="title" class="col control-label">Titel:</label>
+            <div class="col">
+              <input v-model="shortstory.title" class="form-control" placeholder="Titel"></input>
             </div>
-            <div class="form-group">
-              <label for="genre" class="col control-label">Genre:</label>
-              <div class="col">
-                <select class="form-control" name="genre" class="genreSelect" v-model="shortstory.genre">
-                  <option value="Romance">Romance</option>
-                  <option value="History">History</option>
-                  <option value="Fantasy">Fantasy</option>
-                  <option value="Crime">Crime</option>
-                  <option value="Ratgeber">Ratgeber</option>
-                  <option value="Kinder">Kinder</option>
-                </select>
-              </div>
+          </div>
+          <div class="form-group">
+            <label for="genre" class="col control-label">Genre:</label>
+            <div class="col">
+              <select class="form-control" name="genre" class="genreSelect" v-model="shortstory.genre">
+                <option value="Romance">Romance</option>
+                <option value="History">History</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Crime">Crime</option>
+                <option value="Ratgeber">Ratgeber</option>
+                <option value="Kinder">Kinder</option>
+              </select>
             </div>
-            <div class="form-group">
-              <label for="text" class="col control-label">Text:</label>
-              <div class="col">
-                <textarea class="form-control" rows="10" placeholder="Geben Sie hier Ihre Geschichte ein."
-                  v-model="shortstory.text" class="form-control" rows="3"></textarea>
-              </div>
+          </div>
+          <div class="form-group">
+            <label for="text" class="col control-label">Text:</label>
+            <div class="col">
+              <textarea class="form-control" rows="10" placeholder="Geben Sie hier Ihre Geschichte ein."
+                v-model="shortstory.text" class="form-control" rows="3"></textarea>
             </div>
-            <div class="col" style="display: flex;" >
-              <button class="btn btn-success mr-2" title="Speichern"><i class="bi bi-save-fill"></i></button>
-              <div v-if="this.authorList == true">
-                <button class="btn btn-default"  @click="OwnTitles()" title="Zurück"><i class="bi bi-arrow-left-square-fill"></i></button>
-              </div>
-              <div v-if="this.authorList == false">
-                <button class="btn btn-default"  @click="Home()" title="Zurück"><i
-                    class="bi bi-house-door-fill"></i></button>
-              </div>
-
+          </div>
+          <div class="col" style="display: flex;">
+            <button class="btn btn-success mr-2" title="Speichern">Speichern</button>
+            <div v-if="this.authorList == true">
+              <button class="btn btn-default" @click="OwnTitles()" title="Zurück"><i
+                  class="bi bi-arrow-left-square-fill"></i></button>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
       <!-- end input mode -->
     </div>
