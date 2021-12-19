@@ -1,6 +1,5 @@
 package de.caro_annemie.kurzgeschichten_kreisel.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,26 +11,22 @@ import javax.validation.constraints.NotBlank;
  * User entity
  */
 @Entity
-@Table(name = "`user`", uniqueConstraints = {@UniqueConstraint(columnNames = "username"), @UniqueConstraint(columnNames = "email")})
+@Table(name = "`user`", uniqueConstraints = {@UniqueConstraint(columnNames = "username"), @UniqueConstraint(columnNames = "email"),})
 public class User {
   @Id
   @GeneratedValue
   private long id;
 
   @NotBlank
-  @Column(length = 20)
   private String username;
 
   @NotBlank
-  @Column(length = 50)
   private String role;
 
   @NotBlank
-  @Column(length = 20)
   private String password;
 
   @NotBlank
-  @Column(length = 50)
   private String email;
 
   //constructors
