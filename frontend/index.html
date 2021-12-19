@@ -19,7 +19,7 @@
   <div id="app">
     <!-- start title-->
     <div class="jumbotron text-center">
-      <h1 class="display-4">Kurzgeschichtenkreisel</h1>
+      <h1 class="display-5">Kurzgeschichtenkreisel</h1>
       <p class="lead">Erlebe spannende Geschichten oder werde selbst Autor</p>
     </div>
     <!-- end title-->
@@ -75,49 +75,45 @@
       </div>
       <!-- end login / register-->
 
-      <!-- start user area top-->
+      <!-- start nav bar top-->
       <div v-if="token == true">
         <div>
           <div class="breadcrumb">
-            <div class="col">
-              <button class="btn btn-dark mr-2 btnShow" style="float: left;" @click="Home()" title="Home"><i
+            <div class="col" style="padding-left: unset;">
+              <button class="btn btn-dark mr-3 btnShow" style="float: left;" @click="Home()" title="Home"><i
                   class="bi bi-house-door-fill"></i></button>
               <div v-if="role === 'ROLE_Author'">
-                <button class="btn btn-primary mr-2" style="float: left;" @click="newStory()"
-                  title="Neuen Titel anlegen"><i class="bi bi-plus-square"></i> Neu</button>
+                <button class="btn btn-primary mr-3" style="float: left;" @click="newStory()"
+                  title="Neuen Titel anlegen">Neuer Titel</button>
                 <button class="btn btn-info btnShow" style="float: left;" @click="OwnTitles()"
                   title="Eigene Titel anzeigen">Meine Titel</button>
               </div>
             </div>
-
-            <div class="col-5">
+            <div class="col-5" style="padding-right: unset;">
               <button class="btn btn-secondary" style="float: right;" @click="logout()" title="Logout"><i
                   class="bi bi-door-closed-fill"></i></button>
-              <h5 class="mr-2" style="float: right;">{{ user.username }}</h5>
+              <h6 class="mr-3" style="float: right; margin-top: 0.7rem;">{{ user.username }}</h6>
             </div>
           </div>
         </div>
-        <!-- end user area top-->
+        <!-- end nav bar top-->
 
         <!-- start select field-->
         <div class="form-horizontal" style="clear: both;" v-if="selector == true">
           <h3 class="mt-4">Finde Geschichten zum schmökern und träumen:</h3>
           <form @submit.prevent="search()">
-
             <div class="row mt-4" style="margin-right: 0;">
               <label for="genreSelect" class="col control-label">Genre:</label>
-
               <select name="genreSelect" class="col-2 genreSelect form-control mb-2 " v-model="genreSearch">
                 <option value="">Alle</option>
-                <option value="Romance">Romance</option>
-                <option value="History">History</option>
+                <option value="Romance">Liebe</option>
+                <option value="History">Historisches</option>
                 <option value="Fantasy">Fantasy</option>
-                <option value="Crime">Crime</option>
+                <option value="Crime">Krimi</option>
                 <option value="Ratgeber">Ratgeber</option>
                 <option value="Kinder">Kinder</option>
               </select>
-
-              <label for="titleSearch" class="col control-label">Titel:</label>
+              <label for="titleSearch" style="padding-right: unset;" class="col control-label">Titel:</label>
               <input type="text" class="col-7 form-control mb-2" v-model="titleSearch" placeholder="Alle">
               <button class="ml-2 col btn float-right mb-2" title="Suchen"><i class="bi bi-search"></i></button>
             </div>
@@ -133,7 +129,7 @@
             @click="showdetail(shortstory.id, shortstory.title, shortstory.author, shortstory.creationDate, shortstory.genre, shortstory.text, false)"
             :key="shortstory.id">
             <div class="row ">
-              <div class="col-5">
+              <div class="col-5" style="margin-top: 7px;">
                 <div v-if="shortstory.author == user.username">
                   <h4 style="color: #17a2b8">{{ shortstory.title }}</h4>
                 </div>
@@ -141,7 +137,7 @@
                   <h4 style="color: black">{{ shortstory.title }}</h4>
                 </div>
               </div>
-              <div class="col-3">
+              <div class="col-3" style="margin-top: 10px;">
                 <div v-if="shortstory.author == user.username">
                   <p style="color: #17a2b8"> <strong>{{ shortstory.author }} </strong></p>
                 </div>
@@ -149,7 +145,7 @@
                   <p style="color: black;"> <strong>{{ shortstory.author }} </strong></p>
                 </div>
               </div>
-              <div class="col">
+              <div class="col" style="margin-top: 10px;">
                 <div v-if="shortstory.author == user.username">
                   <p style="color: #17a2b8"> {{ shortstory.genre }}</p>
                 </div>
@@ -161,8 +157,12 @@
           </li>
         </ul>
         <div class="mt-4" v-if="this.noEntryfound == true">
-          <p style="background-color: rgb(255, 91, 91); text-align: center;">Zu Ihrer Suche wurde kein passender Titel gefunden.</p>
+          <p style="background-color: rgb(255, 91, 91); text-align: center;">Zu Ihrer Suche wurde kein passender Titel
+            gefunden.</p>
         </div>
+        <ul v-if="this.selectActive == false" class="pagination justify-content-center mt-3">
+          <li class="page-item" v-for="page in pages"><a class="page-link" @click="ChangePage(page)">{{page}}</a></li>  
+        </ul>
       </div>
       <!-- end List shortstories -->
 
@@ -172,29 +172,28 @@
           <div class="col-10">
             <h3>Hallo {{ user.username }}, hier kannst du deine Titel bearbeiten</h3>
           </div>
-          
         </div>
-
         <ul class="list-group shortstoriesAuthor mt-4" style="clear: both;">
           <li class="list-group-item" v-for="(shortstory, index ) in shortstories"
             @click="showdetail(shortstory.id, shortstory.title, shortstory.author, shortstory.creationDate, shortstory.genre, shortstory.text, true)"
             :key="shortstory.id">
             <div class="row ">
               <div class="col-5">
-                <h4 style="color: gray">{{ shortstory.title }}</h4>
+                <h4 style="color: gray; margin-top: 7px;">{{ shortstory.title }}</h4>
               </div>
-              <div class="col-3">
+              <div class="col-3" style="margin-top: 10px;">
                 <p style="color: gray;"><strong>{{ shortstory.creationDate.substr(8, 2) }}.{{
                     shortstory.creationDate.substr(5, 2) }}.{{ shortstory.creationDate.substr(0, 4) }} </strong></p>
               </div>
-              <div class="col">
+              <div class="col" style="margin-top: 10px;">
                 <p style="color: gray">{{ shortstory.genre }}</p>
               </div>
-              <div class="col" v-if="shortstory.author == user.username">
-                <button type="button" class="btn btn-success mr-2" @click="change()" title="Titel ändern"><i
-                    class="bi bi-pencil-fill icon"></i></button>
-                <button type="button" class="btn btn-warning btnShow" @click="onDelete(shortstory.id, true)"
-                  title="Titel löschen"><i class="bi bi-trash-fill icon"></i></button>
+              <div class="col" style="padding-right: 10px;" v-if="shortstory.author == user.username">
+                <button type="button" style="float: right;" class="btn btn-warning btnShow"
+                  @click="onDelete(shortstory.id, true)" title="Titel löschen"><i
+                    class="bi bi-trash-fill icon"></i></button>
+                <button type="button" style="float: right;" class="btn btn-success mr-3" @click="change()"
+                  title="Titel ändern"><i class="bi bi-pencil-fill icon"></i></button>
               </div>
             </div>
           </li>
@@ -210,21 +209,20 @@
             <p><em>{{ shortstory.author}}</em></p>
             <p>Genre: {{ shortstory.genre }}</p>
           </div>
-
         </div>
         <div class="row">
           <blockquote class="col-12 blockquote mt-4">
             <p class="mb-0">{{ shortstory.text }}</p>
           </blockquote>
         </div>
-        <!-- start change mode -->
+        <!-- start change area for author -->
         <div v-if="role === 'ROLE_Author' && logindata.username == shortstory.author">
-          <button type="button" class="btn btn-success mr-2 " @click="change()" title="Titel ändern"><i
+          <button type="button" class="btn btn-success mr-3 " @click="change()" title="Titel ändern"><i
               class="bi bi-pencil-fill"></i></button>
           <button type="button" class="btn btn-warning" @click="onDelete(shortstory.id, false)" title="Titel löschen"><i
               class="bi bi-trash-fill"></i></button>
         </div>
-        <!-- end change mode -->
+        <!-- end change area for author -->
       </div>
       <!-- end read mode -->
 
@@ -232,32 +230,32 @@
       <div v-if="changeInput == true">
         <form class="form-horizontal" @submit.prevent="onChange()">
           <div class="form-group">
-            <label for="title" class="col control-label">Titel:</label>
-            <div class="col">
+            <label for="title" style="padding: unset;" class="col control-label">Titel:</label>
+            <div class="col" style="padding: unset;">
               <input v-model="shortstory.title" class="form-control" placeholder="Titel"></input>
             </div>
           </div>
           <div class="form-group">
-            <label for="genre" class="col control-label">Genre:</label>
-            <div class="col">
+            <label for="genre" style="padding: unset;" class="col control-label">Genre:</label>
+            <div class="col"  style="padding: unset;">
               <select class="form-control" name="genre" class="genreSelect" v-model="shortstory.genre">
-                <option value="Romance">Romance</option>
-                <option value="History">History</option>
+                <option value="Romance">Liebe</option>
+                <option value="History">Historisches</option>
                 <option value="Fantasy">Fantasy</option>
-                <option value="Crime">Crime</option>
+                <option value="Crime">Krimi</option>
                 <option value="Ratgeber">Ratgeber</option>
                 <option value="Kinder">Kinder</option>
               </select>
             </div>
           </div>
           <div class="form-group">
-            <label for="text" class="col control-label">Text:</label>
-            <div class="col">
+            <label for="text" style="padding: unset;" class="col control-label">Text:</label>
+            <div class="col"  style="padding: unset;">
               <textarea class="form-control" rows="10" placeholder="Geben Sie hier Ihre Geschichte ein."
                 v-model="shortstory.text" class="form-control" rows="3"></textarea>
             </div>
           </div>
-          <div class="col" style="display: flex;">
+          <div class="col" style="display: flex; padding: unset;">
             <button class="btn btn-success mr-2" title="Speichern">Speichern</button>
             <div v-if="this.authorList == true">
               <button class="btn btn-default" @click="OwnTitles()" title="Zurück"><i
@@ -269,9 +267,9 @@
       <!-- end input mode -->
     </div>
   </div>
+
   <!-- Import App -->
   <script src="javascript/main.js"></script>
-
   <!-- Mount App -->
   <script>
     const mountedApp = app.mount('#app')
