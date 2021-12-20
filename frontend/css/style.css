@@ -62,8 +62,3 @@ button {
 .container {
     padding: unset;
 }
-
-.page-item a:active{
-    color:#e9f8fa;
-    font-weight: bold;
-}

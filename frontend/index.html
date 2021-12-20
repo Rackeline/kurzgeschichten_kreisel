@@ -161,7 +161,7 @@
             gefunden.</p>
         </div>
         <ul v-if="this.selectActive == false" class="pagination justify-content-center mt-3">
-          <li class="page-item" v-for="page in pages"><a class="page-link" @click="ChangePage(page)">{{page}}</a></li>  
+          <li class="page-item" v-for="page in pages"><button class="page-link" @click="ChangePage(page)">{{page}}</button></li>  
         </ul>
       </div>
       <!-- end List shortstories -->
