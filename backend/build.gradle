@@ -8,6 +8,10 @@ group = 'de.caro_annemie'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+bootJar {
+	launchScript()
+}
+
 repositories {
 	mavenCentral()
 }
