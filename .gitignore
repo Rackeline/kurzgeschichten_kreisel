@@ -1,2 +1,19 @@
-frontend/components/dropdown.js
+# Allgemein
 **/.gradle
+**/.vscode
+*.code-workspace
+HELP.md
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+**/.classpath
+**/.project
+**/.settings
+
+# Frontend
+frontend/components/dropdown.js
+
+# Backend
+backend/bin
+backend/.gradle
