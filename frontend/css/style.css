@@ -62,3 +62,7 @@ button {
 .container {
     padding: unset;
 }
+
+.page-link {
+    color: rgb(108, 117, 125);
+}
